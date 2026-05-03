@@ -7,17 +7,14 @@ language: csharp
 steps:
   # Add packages
   - action: run_command
-    command: 'dotnet add package Mediator.Abstractions --version 3.0.*'
-    working_directory: 'src/core/{{ Service }}.Core.Application'
+    command: 'dotnet add src/core/{{ Service }}.Core.Application/{{ Service }}.Core.Application.csproj package Mediator.Abstractions --version 3.0.*'
   - action: run_command
-    command: 'dotnet add package Mediator.SourceGenerator --version 3.0.*'
-    working_directory: 'src/core/{{ Service }}.Core.Application'
-  # - action: run_command # TODO: Active when NFramework packages are released
-  #   command: 'dotnet add package NFramework.Mediator.Mediator'
-  #   working_directory: 'src/core/{{ Service }}.Core.Application'
-  # - action: run_command
-  #   command: 'dotnet add package NFramework.Mediator.Mediator.Validation.FluentValidation'
-  #   working_directory: 'src/core/{{ Service }}.Core.Application'
+    command: 'dotnet add src/core/{{ Service }}.Core.Application/{{ Service }}.Core.Application.csproj package Mediator.SourceGenerator --version 3.0.*'
+  # TODO: These references are currently local for development. Change to NFramework.Mediator.Mediator packages once published.
+  - action: run_command
+    command: 'dotnet add src/core/{{ Service }}.Core.Application/{{ Service }}.Core.Application.csproj reference ../../../src/core-mediator-dotnet/src/NFramework.Mediator.Mediator/NFramework.Mediator.Mediator.csproj'
+  - action: run_command
+    command: 'dotnet add src/core/{{ Service }}.Core.Application/{{ Service }}.Core.Application.csproj reference ../../../src/core-mediator-dotnet/src/NFramework.Mediator.Mediator.Validation.FluentValidation/NFramework.Mediator.Mediator.Validation.FluentValidation.csproj'
   # Add Mediator to registration
   - action: inject
     source: 'content/mediator_registration.cs.tera'

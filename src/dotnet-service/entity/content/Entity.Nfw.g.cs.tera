@@ -15,9 +15,25 @@ namespace {{ Service }}.Core.Domain.Features.{{ Feature }}.Entities;
 /// </summary>
 public partial class {{ Name }}
 {
-    public {{ Name }}({{ CSIdType }} id)
+    public {{ Name }}(
+        {{ CSIdType }} id
+{%- for prop in Properties %}{% if not prop.nullable %}
+        {%- if prop.type == "string" -%}{% set tname = "string" -%}
+        {%- elif prop.type == "int" or prop.type == "integer" -%}{% set tname = "int" -%}
+        {%- elif prop.type == "short" -%}{% set tname = "short" -%}
+        {%- elif prop.type == "decimal" -%}{% set tname = "decimal" -%}
+        {%- elif prop.type == "boolean" or prop.type == "bool" -%}{% set tname = "bool" -%}
+        {%- elif prop.type == "datetime" -%}{% set tname = "DateTime" -%}
+        {%- elif prop.type == "uuid" or prop.type == "guid" -%}{% set tname = "Guid" -%}
+        {%- elif prop.type == "bytes" -%}{% set tname = "byte[]" -%}
+        {%- else -%}{% set tname = prop.type -%}{% endif -%}
+        , {{ tname }} {{ prop.name | lower }}
+{%- endif %}{% endfor %})
         : base(id)
     {
+{%- for prop in Properties %}{% if not prop.nullable %}
+        {{ prop.name }} = {{ prop.name | lower }};
+{%- endif %}{% endfor %}
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage(
@@ -32,6 +48,7 @@ public partial class {{ Name }}
 {% for prop in Properties -%}
     {%- if prop.type == "string" -%}{% set CSType = "string" -%}
     {%- elif prop.type == "integer" -%}{% set CSType = "int" -%}
+    {%- elif prop.type == "short" -%}{% set CSType = "short" -%}
     {%- elif prop.type == "decimal" -%}{% set CSType = "decimal" -%}
     {%- elif prop.type == "boolean" -%}{% set CSType = "bool" -%}
     {%- elif prop.type == "datetime" -%}{% set CSType = "DateTime" -%}

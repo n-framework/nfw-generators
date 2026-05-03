@@ -6,6 +6,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NFramework.Persistence.EFCore.Extensions;
 using {{ Service }}.Core.Domain.Features.{{ Feature }}.Entities;
 
+{% if IdType == "string" -%}{%- set CSIdType = "string" -%}
+{%- elif IdType == "integer" -%}{%- set CSIdType = "int" -%}
+{%- elif IdType == "uuid" -%}{%- set CSIdType = "Guid" -%}
+{%- else -%}{%- set CSIdType = IdType -%}{%- endif -%}
 namespace {{ Service }}.Infrastructure.Persistence.Features.{{ Feature }}.Configurations;
 
 public partial class {{ Name }}Configuration
@@ -15,14 +19,14 @@ public partial class {{ Name }}Configuration
         builder.ToTable("{{ Name }}s");
 
         {% if EntityType == "entity" -%}
-        builder.ConfigureEntity();
+        builder.ConfigureEntity<{{ Name }}, {{ CSIdType }}>();
         {%- elif EntityType == "auditable_entity" -%}
-        builder.ConfigureEntity()
-               .ConfigureAuditable();
+        builder.ConfigureEntity<{{ Name }}, {{ CSIdType }}>()
+               .ConfigureAuditable<{{ Name }}, {{ CSIdType }}>();
         {%- elif EntityType == "soft_deletable_entity" -%}
-        builder.ConfigureEntity()
-               .ConfigureAuditable()
-               .ConfigureSoftDeletable();
+        builder.ConfigureEntity<{{ Name }}, {{ CSIdType }}>()
+               .ConfigureAuditable<{{ Name }}, {{ CSIdType }}>()
+               .ConfigureSoftDeletable<{{ Name }}, {{ CSIdType }}>();
         {%- endif %}
 
         {% for prop in Properties -%}

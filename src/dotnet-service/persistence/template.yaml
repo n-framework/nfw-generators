@@ -11,6 +11,14 @@ steps:
   - action: render_folder
     source: 'content/src/'
     destination: 'src/'
+  # TODO: This reference is currently local for development. Change to NFramework.Persistence.Abstractions package once published.
+  # Add NFramework.Persistence.Abstractions reference to Domain project
+  - action: run_command
+    command: 'dotnet add src/core/{{ Service }}.Core.Domain reference ../../../src/core-persistence-dotnet/src/NFramework.Persistence.Abstractions/NFramework.Persistence.Abstractions.csproj'
+  # TODO: This reference is currently local for development. Change to NFramework.Persistence.EFCore package once published.
+  # Add NFramework.Persistence.EFCore reference to Infrastructure.Persistence project
+  - action: run_command
+    command: 'dotnet add src/infrastructure/{{ Service }}.Infrastructure.Persistence reference ../../../src/core-persistence-dotnet/src/NFramework.Persistence.EFCore/NFramework.Persistence.EFCore.csproj'
   # Wire the Persistence project into the solution
   - action: run_command
     command: 'dotnet sln add src/infrastructure/{{ Service }}.Infrastructure.Persistence/{{ Service }}.Infrastructure.Persistence.csproj'
