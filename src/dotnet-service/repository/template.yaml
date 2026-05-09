@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=../../../template.schema.json
+id: dotnet-service/repository
+name: Repository Generator
+description: Generates repository files based on template configuration
+version: 1.0.0
+language: csharp
+tags:
+  - repository
+  - feature
+steps:
+  - action: render
+    source: "content/interface/IEntityRepository.cs.tera"
+    destination: "src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Repositories/I{{ Entity }}Repository.cs"
+  - action: render
+    source: "content/implementation/EntityRepository.cs.tera"
+    destination: "src/infrastructure/{{ Service }}.Infrastructure.Persistence/Features/{{ Feature }}/Repositories/{{ Entity }}Repository.cs"
+  - action: inject
+    source: "content/di-registration/registration.tera"
+    destination: "src/infrastructure/{{ Service }}.Infrastructure.Persistence/InfrastructurePersistenceRegistrationExtensions.Nfw.g.cs"
+    injection_target:
+      type: region
+      value: repository-registrations
+  - action: inject
+    source: "content/di-registration/usings.tera"
+    destination: "src/infrastructure/{{ Service }}.Infrastructure.Persistence/InfrastructurePersistenceRegistrationExtensions.Nfw.g.cs"
+    injection_target:
+      type: region
+      value: repository-usings

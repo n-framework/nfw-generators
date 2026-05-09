@@ -1,0 +1,13 @@
+using NFramework.Persistence.EFCore.Repositories;
+using {{ Service }}.Core.Application.Features.{{ Feature }}.Repositories;
+using {{ Service }}.Core.Domain.Features.{{ Feature }}.Entities;
+using {{ Service }}.Infrastructure.Persistence.Shared.Database.Contexts;
+
+namespace {{ Service }}.Infrastructure.Persistence.Features.{{ Feature }}.Repositories;
+
+public class {{ Entity }}Repository : EFCoreRepository<{{ Entity }}, Guid, BaseDbContext>, I{{ Entity }}Repository
+{
+    public {{ Entity }}Repository(BaseDbContext context) : base(context)
+    {
+    }
+}

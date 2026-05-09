@@ -1,0 +1,10 @@
+using NFramework.Persistence.Abstractions.Repositories;
+using {{ Service }}.Core.Domain.Features.{{ Feature }}.Entities;
+
+namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Repositories;
+
+public interface I{{ Entity }}Repository : 
+    IReadRepository<{{ Entity }}, Guid>, 
+    IWriteRepository<{{ Entity }}, Guid>
+{
+}
