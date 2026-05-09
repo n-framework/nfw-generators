@@ -1,0 +1,14 @@
+# yaml-language-server: $schema=../../../template.schema.json
+id: dotnet-service/webapi
+name: WebAPI Module
+description: Adds the Presentation.WebApi project with Minimal API configuration, routing, middleware, and Swagger
+version: 1.0.0
+language: csharp
+tags:
+  - feature
+steps:
+  - action: render_folder
+    source: 'content/src/'
+    destination: 'src/'
+  - action: run_command
+    command: 'dotnet sln add src/presentation/{{ Service }}.Presentation.WebApi/{{ Service }}.Presentation.WebApi.csproj'

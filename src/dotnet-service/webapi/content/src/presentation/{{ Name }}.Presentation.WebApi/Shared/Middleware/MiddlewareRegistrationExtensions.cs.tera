@@ -1,0 +1,29 @@
+namespace {{ Name }}.Presentation.WebApi.Shared.Middleware;
+
+public static class MiddlewareRegistrationExtensions
+{
+    public static IServiceCollection AddDefaultMiddleware(this IServiceCollection services)
+    {
+        services.AddProblemDetails();
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            });
+        });
+
+        return services;
+    }
+
+    public static WebApplication UseDefaultMiddleware(this WebApplication app)
+    {
+        app.UseExceptionHandler();
+        app.UseStatusCodePages();
+        app.UseCors();
+
+        return app;
+    }
+}

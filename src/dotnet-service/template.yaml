@@ -15,4 +15,6 @@ generators:
   mediator: ./mediator/
   persistence: ./persistence/
   query: ./query/
+  repository: ./repository/
   service: ./service/
+  webapi: ./webapi/

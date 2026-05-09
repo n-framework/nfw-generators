@@ -74,7 +74,12 @@
         "api": { "type": "string" },
         "command": { "type": "string" },
         "mediator": { "type": "string" },
-        "query": { "type": "string" }
+        "query": { "type": "string" },
+        "repository": { "type": "string" },
+        "entity": { "type": "string" },
+        "webapi": {
+            "type": "string"
+        },
       },
       "additionalProperties": false,
       "description": "Explicit path mappings for child generators (e.g. service, persistence)."

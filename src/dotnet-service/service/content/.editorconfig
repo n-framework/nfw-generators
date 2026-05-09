@@ -6,6 +6,8 @@ end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
+indent_style = space
+indent_size = 4
 
 ## C# files
 [*.cs]
@@ -224,8 +226,16 @@ dotnet_naming_style.local.required_suffix =
 dotnet_naming_style.local.word_separator =
 dotnet_naming_style.local.capitalization = camel_case
 
-[**/tests/**/*.cs]
+[{tests,src/**/*.Tests}/**/*.cs]
 # CA1707: Identifiers should not contain underscores
 dotnet_diagnostic.CA1707.severity = none
+# CA1873: False positive in Moq Verify extension where It.IsAny is flagged
+dotnet_diagnostic.CA1873.severity = none
+# CA2201: Standard to throw raw Exception when simulating faults in tests
+dotnet_diagnostic.CA2201.severity = none
+# CA1822: Test mock properties often deliberately avoid static modifier for reflection
+dotnet_diagnostic.CA1822.severity = none
+# CA2007: ConfigureAwait(false) is not generally required in xUnit testing context
+dotnet_diagnostic.CA2007.severity = none
 # IDE0058: Expression value is never used
 dotnet_diagnostic.IDE0058.severity = none

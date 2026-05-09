@@ -1,0 +1,15 @@
+namespace {{ Name }}.Presentation.WebApi.Shared.Routing;
+
+public static class RouteRegistrationExtensions
+{
+    public static WebApplication MapApiEndpoints(this WebApplication app)
+    {
+        // This group acts as the base for all API endpoints in the service
+        var apiGroup = app.MapGroup("/api");
+
+        // <nfw:feature-groups:start>
+        // <nfw:feature-groups:end>
+
+        return app;
+    }
+}

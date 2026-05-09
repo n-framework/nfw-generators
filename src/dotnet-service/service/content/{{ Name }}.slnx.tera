@@ -1,5 +1,4 @@
 <Solution>
 	<Project Path="src/core/{{ Name }}.Core.Domain/{{ Name }}.Core.Domain.csproj" />
 	<Project Path="src/core/{{ Name }}.Core.Application/{{ Name }}.Core.Application.csproj" />
-	<Project Path="src/presentation/{{ Name }}.Presentation.WebApi/{{ Name }}.Presentation.WebApi.csproj" />
 </Solution>
