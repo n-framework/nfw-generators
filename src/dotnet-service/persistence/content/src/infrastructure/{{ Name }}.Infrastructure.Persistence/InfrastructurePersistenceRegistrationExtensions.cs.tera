@@ -3,29 +3,40 @@ using {{ Name }}.Infrastructure.Persistence.Shared.Database.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NFramework.Persistence.EFCore.Interceptors;
 
 namespace {{ Name }}.Infrastructure.Persistence;
 
 public readonly record struct InfrastructureConfiguration(DatabaseConfiguration Database);
 
-public static class InfrastructurePersistenceRegistrationExtensions
+public static partial class InfrastructurePersistenceRegistrationExtensions
 {
 	extension(IServiceCollection services)
 	{
 		public IServiceCollection AddInfrastructureServices(InfrastructureConfiguration configuration)
 		{
-			return AddDatabase(services, configuration);
+			services.AddDatabase(configuration);
+			services.AddNfwRepositories();
+			return services;
 		}
-	}
 
-	private static IServiceCollection AddDatabase(
-		IServiceCollection services,
-		InfrastructureConfiguration configuration
-	)
-	{
-		return services.AddDbContext<BaseDbContext>(options =>
-			options.UseInMemoryDatabase(databaseName: configuration.Database.Name)
-		);
+		public IServiceCollection AddDatabase(InfrastructureConfiguration configuration)
+		{
+			services.AddSingleton<AuditableInterceptor>();
+			services.AddSingleton<SoftDeletionInterceptor>();
+			services.AddSingleton<AuditLoggerInterceptor>();
+
+			return services.AddDbContext<BaseDbContext>((sp, options) =>
+			{
+				options.UseInMemoryDatabase(databaseName: configuration.Database.Name);
+
+				options.AddInterceptors(
+					sp.GetRequiredService<AuditableInterceptor>(),
+					sp.GetRequiredService<SoftDeletionInterceptor>(),
+					sp.GetRequiredService<AuditLoggerInterceptor>()
+				);
+			});
+		}
 	}
 
 	extension(IConfiguration configuration)

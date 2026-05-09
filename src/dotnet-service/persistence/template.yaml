@@ -28,14 +28,14 @@ steps:
   # Inject persistence registration into Program.Nfw.g.cs
   - action: inject
     source: 'content/persistence_registration.cs.tera'
-    destination: 'src/presentation/{{ Service }}.Presentation.WebApi/Program.Nfw.g.cs'
+    destination: 'src/presentation/{{ Service }}.Presentation.{{ PresentationLayer }}/Program.Nfw.g.cs'
     injection_target:
       type: region
       value: module-registrations
   # Inject persistence using into Program.Nfw.g.cs
   - action: inject
     source: 'content/persistence_usings.cs.tera'
-    destination: 'src/presentation/{{ Service }}.Presentation.WebApi/Program.Nfw.g.cs'
+    destination: 'src/presentation/{{ Service }}.Presentation.{{ PresentationLayer }}/Program.Nfw.g.cs'
     injection_target:
       type: region
       value: module-usings
