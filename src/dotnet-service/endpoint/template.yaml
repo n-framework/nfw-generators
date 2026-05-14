@@ -51,3 +51,11 @@ steps:
     injection_target:
       type: region
       value: feature-groups
+
+  # 8. Inject the feature namespace using into RouteRegistrationExtensions (idempotent via region)
+  - action: inject
+    source: FeatureUsingEntry.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Shared/Routing/RouteRegistrationExtensions.Nfw.g.cs
+    injection_target:
+      type: region
+      value: feature-group-usings

@@ -13,7 +13,7 @@ internal static partial class {{ Name }}Endpoint
 
     extension(IEndpointRouteBuilder endpoints)
     {
-        public void Map{{ Name }}Endpoint()
+        internal void Map{{ Name }}Endpoint()
         {
             _ = endpoints
                 .Map{{ OperationType | pascal_case }}(
@@ -21,25 +21,25 @@ internal static partial class {{ Name }}Endpoint
                     async ({{ Name }}Request request, ISender sender) =>
                     {%- if AttachToMediator %}
                     {
-                        var response = await sender.Send(request.To{% if OperationType == "Get" %}Query{% else %}Command{% endif %}());
+                        var response = await sender.Send(request.To{% if OperationType == "Get" %}Query{% else %}Command{% endif %}()).ConfigureAwait(false);
                         return Results.Ok({{ Name }}Response.From(response));
                     }
                 {%- else %}
                     {
                         // TODO: Implement endpoint
-                        await Task.CompletedTask;
+                        await Task.CompletedTask.ConfigureAwait(false);
                         return Results.Ok();
                     }
                 {%- endif %}
                 )
                 .WithName(OperationName)
                 .WithTags(Tag)
-                .Produces(StatusCodes.Status200OK, typeof({{ Name }}Response))
-                .WithOpenApi(operation =>
+                .Produces<{{ Name }}Response>(StatusCodes.Status200OK)
+                .AddOpenApiOperationTransformer((operation, context, ct) =>
                 {
                     // TODO: Add detailed operation summary and description here
                     operation.Summary = OpenApiSummary;
-                    return operation;
+                    return Task.CompletedTask;
                 });
         }
     }

@@ -6,6 +6,10 @@ namespace {{ Service }}.Presentation.WebApi.Features.{{ Feature }}.Endpoints.{{ 
 
 internal record {{ Name }}Response
 {
+{%- if AttachToMediator %}
     // TODO: Map response properties from {{ Name }}{% if OperationType == "Get" %}Query{% else %}Command{% endif %}Result
-    public static {{ Name }}Response From({{ Name }}{% if OperationType == "Get" %}Query{% else %}Command{% endif %}Result result) => new();
+    internal static {{ Name }}Response From({{ Name }}{% if OperationType == "Get" %}Query{% else %}Command{% endif %}Result result) => new();
+{%- else %}
+    // TODO: Add response properties
+{%- endif %}
 }

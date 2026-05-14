@@ -10,9 +10,9 @@ internal record {{ Name }}Request
 
 {%- if AttachToMediator %}
     {%- if OperationType == "Get" %}
-    public {{ Name }}Query ToQuery() => new();
+    internal {{ Name }}Query ToQuery() => new();
     {%- else %}
-    public {{ Name }}Command ToCommand() => new();
+    internal {{ Name }}Command ToCommand() => new();
     {%- endif %}
 {%- endif %}
 }

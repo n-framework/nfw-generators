@@ -10,7 +10,7 @@ public record {{ Name }}Query : IRequest<{{ Name }}QueryResult>
     {%- if "Validation" in Pipelines %}, IValidatableRequest{%- endif %}
     {%- if "Logging" in Pipelines %}, ILoggableRequest{%- endif %}
     {%- if "Authorization" in Pipelines %}, ISecuredRequest{%- endif %}
-    {%- if "Caching" in Pipelines %}, ICachableRequest{%- endif %}
+    {%- if "Caching" in Pipelines %}, ICacheableRequest{%- endif %}
 {
     // TODO: Add query properties
 {% if "Logging" in Pipelines %}
