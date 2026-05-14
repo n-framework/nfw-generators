@@ -1,6 +1,6 @@
-namespace {{ Namespace }}.Core.Application.Features.{{ Feature }}.Queries.{{ Name }};
+namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Queries.{{ Name }};
 
-public record {{ Name }}Response
+public record {{ Name }}QueryResult
 {
     // TODO: Define the properties for the response
 }

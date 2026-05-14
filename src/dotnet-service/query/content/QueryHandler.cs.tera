@@ -1,14 +1,12 @@
 using Mediator;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace {{ Namespace }}.Core.Application.Features.{{ Feature }}.Queries.{{ Name }};
+namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Queries.{{ Name }};
 
-public class {{ Name }}QueryHandler : IRequestHandler<{{ Name }}Query, {{ Name }}Response>
+public class {{ Name }}QueryHandler : IRequestHandler<{{ Name }}Query, {{ Name }}QueryResult>
 {
-    public ValueTask<{{ Name }}Response> Handle({{ Name }}Query request, CancellationToken cancellationToken)
+    public ValueTask<{{ Name }}QueryResult> Handle({{ Name }}Query request, CancellationToken cancellationToken)
     {
         // TODO: Implementation goes here
-        return new ValueTask<{{ Name }}Response>(new {{ Name }}Response());
+        return new ValueTask<{{ Name }}QueryResult>(new {{ Name }}QueryResult());
     }
 }

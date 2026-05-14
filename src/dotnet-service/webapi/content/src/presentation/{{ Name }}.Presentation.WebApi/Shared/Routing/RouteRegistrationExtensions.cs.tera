@@ -1,15 +1,25 @@
-namespace {{ Name }}.Presentation.WebApi.Shared.Routing;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 
-public static class RouteRegistrationExtensions
+namespace {{ Namespace }}.Presentation.WebApi.Shared.Routing;
+
+internal static partial class RouteRegistrationExtensions
 {
-    public static WebApplication MapApiEndpoints(this WebApplication app)
+    extension(IEndpointRouteBuilder endpoints)
     {
-        // This group acts as the base for all API endpoints in the service
-        var apiGroup = app.MapGroup("/api");
+        /// <summary>
+        /// Configures the API endpoints for the application.
+        /// This method is designed to be developer-owned and can be used to add global middleware,
+        /// authorization policies, or other cross-cutting concerns to the API group.
+        /// </summary>
+        internal IEndpointRouteBuilder MapApiEndpoints()
+        {
+            var apiGroup = endpoints.MapGroup("/api");
 
-        // <nfw:feature-groups:start>
-        // <nfw:feature-groups:end>
+            // Calls the auto-generated method that registers all feature endpoint groups.
+            apiGroup.AddNfwFeatureGroups();
 
-        return app;
+            return endpoints;
+        }
     }
 }

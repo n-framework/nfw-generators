@@ -1,7 +1,7 @@
 
 namespace {{ Name }}.Presentation.WebApi.Shared.OpenApi.Models;
 
-public sealed record OpenApiConfiguration(
+internal sealed record OpenApiConfiguration(
 	string Title,
 	string Version,
 	string Description,

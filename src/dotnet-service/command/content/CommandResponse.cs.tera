@@ -1,6 +1,6 @@
-namespace {{ Namespace }}.Core.Application.Features.{{ Feature }}.Commands.{{ Name }};
+namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Commands.{{ Name }};
 
-public record {{ Name }}Response
+public record {{ Name }}CommandResult
 {
     // TODO: Define the properties for the response
 }

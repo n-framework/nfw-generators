@@ -1,0 +1,46 @@
+using Mediator;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+
+namespace {{ Service }}.Presentation.WebApi.Features.{{ Feature }}.Endpoints.{{ Name }};
+
+internal static partial class {{ Name }}Endpoint
+{
+    private const string RoutePath = "/{{ Name | slugify }}";
+    private const string OperationName = "{{ Name }}";
+    private const string Tag = "{{ Feature | pascal_case }}";
+    private const string OpenApiSummary = "{{ Name | sentence_case }}";
+
+    extension(IEndpointRouteBuilder endpoints)
+    {
+        public void Map{{ Name }}Endpoint()
+        {
+            _ = endpoints
+                .Map{{ OperationType | pascal_case }}(
+                    RoutePath,
+                    async ({{ Name }}Request request, ISender sender) =>
+                    {%- if AttachToMediator %}
+                    {
+                        var response = await sender.Send(request.To{% if OperationType == "Get" %}Query{% else %}Command{% endif %}());
+                        return Results.Ok({{ Name }}Response.From(response));
+                    }
+                {%- else %}
+                    {
+                        // TODO: Implement endpoint
+                        await Task.CompletedTask;
+                        return Results.Ok();
+                    }
+                {%- endif %}
+                )
+                .WithName(OperationName)
+                .WithTags(Tag)
+                .Produces(StatusCodes.Status200OK, typeof({{ Name }}Response))
+                .WithOpenApi(operation =>
+                {
+                    // TODO: Add detailed operation summary and description here
+                    operation.Summary = OpenApiSummary;
+                    return operation;
+                });
+        }
+    }
+}

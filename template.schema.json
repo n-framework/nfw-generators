@@ -80,6 +80,9 @@
         "webapi": {
             "type": "string"
         },
+        "endpoint": {
+            "type": "string"
+        }
       },
       "additionalProperties": false,
       "description": "Explicit path mappings for child generators (e.g. service, persistence)."

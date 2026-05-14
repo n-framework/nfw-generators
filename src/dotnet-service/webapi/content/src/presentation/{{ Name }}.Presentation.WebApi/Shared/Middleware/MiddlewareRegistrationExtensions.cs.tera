@@ -1,8 +1,8 @@
 namespace {{ Name }}.Presentation.WebApi.Shared.Middleware;
 
-public static class MiddlewareRegistrationExtensions
+internal static class MiddlewareRegistrationExtensions
 {
-    public static IServiceCollection AddDefaultMiddleware(this IServiceCollection services)
+    internal static IServiceCollection AddDefaultMiddleware(this IServiceCollection services)
     {
         services.AddProblemDetails();
         services.AddCors(options =>
@@ -18,7 +18,7 @@ public static class MiddlewareRegistrationExtensions
         return services;
     }
 
-    public static WebApplication UseDefaultMiddleware(this WebApplication app)
+    internal static WebApplication UseDefaultMiddleware(this WebApplication app)
     {
         app.UseExceptionHandler();
         app.UseStatusCodePages();

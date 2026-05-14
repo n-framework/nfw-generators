@@ -1,10 +1,10 @@
 namespace {{ Name }}.Presentation.WebApi.Shared.OpenApi.Extensions;
 
-public static class OpenApiConfigurationExtensions
+internal static class OpenApiConfigurationExtensions
 {
 	extension(IServiceCollection services)
 	{
-		public IServiceCollection AddOpenApiSupport(IConfiguration configuration)
+		internal IServiceCollection AddOpenApiSupport(IConfiguration configuration)
 		{
 			ArgumentNullException.ThrowIfNull(configuration);
 
@@ -35,7 +35,7 @@ public static class OpenApiConfigurationExtensions
 	extension(IConfiguration configuration)
 	{
 		/// <exception cref="InvalidOperationException">Thrown when OpenApi section is missing or invalid.</exception>
-		public {{ Name }}.Presentation.WebApi.Shared.OpenApi.Models.OpenApiConfiguration GetOpenApiConfiguration()
+		internal {{ Name }}.Presentation.WebApi.Shared.OpenApi.Models.OpenApiConfiguration GetOpenApiConfiguration()
 		{
 			ArgumentNullException.ThrowIfNull(configuration);
 
@@ -50,7 +50,7 @@ public static class OpenApiConfigurationExtensions
 
 	extension(IApplicationBuilder app)
 	{
-		public IApplicationBuilder UseOpenApiUi()
+		internal IApplicationBuilder UseOpenApiUi()
 		{
 			_ = app.UseRouting();
 			_ = app.UseEndpoints(endpoints =>

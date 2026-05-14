@@ -1,0 +1,18 @@
+{%- if AttachToMediator -%}
+using {{ Service }}.Core.Application.Features.{{ Feature }}.{% if OperationType == "Get" %}Queries{% else %}Commands{% endif %}.{{ Name }};
+{%- endif %}
+
+namespace {{ Service }}.Presentation.WebApi.Features.{{ Feature }}.Endpoints.{{ Name }};
+
+internal record {{ Name }}Request
+{
+    // TODO: Add request properties
+
+{%- if AttachToMediator %}
+    {%- if OperationType == "Get" %}
+    public {{ Name }}Query ToQuery() => new();
+    {%- else %}
+    public {{ Name }}Command ToCommand() => new();
+    {%- endif %}
+{%- endif %}
+}

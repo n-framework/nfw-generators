@@ -1,12 +1,13 @@
-{% if "Validation" in Pipelines %}using NFramework.Mediator.Abstractions.Validation;
-{% endif %}{% if "Logging" in Pipelines %}using NFramework.Mediator.Abstractions.Logging;
-{% endif %}{% if "Transaction" in Pipelines %}using NFramework.Mediator.Abstractions.Transactions;
-{% endif %}{% if "Authorization" in Pipelines %}using NFramework.Mediator.Abstractions.Authorization;
-{% endif %}{% if "Caching" in Pipelines %}using NFramework.Mediator.Abstractions.Caching;
-{% endif %}
-namespace {{ Namespace }}.Core.Application.Features.{{ Feature }}.Commands.{{ Name }};
+using Mediator;
+{% if "Authorization" in Pipelines %}using NFramework.Mediator.Abstractions.Authorization;{% endif %}
+{% if "Caching" in Pipelines %}using NFramework.Mediator.Abstractions.Caching;{% endif %}
+{% if "Logging" in Pipelines %}using NFramework.Mediator.Abstractions.Logging;{% endif %}
+{% if "Transaction" in Pipelines %}using NFramework.Mediator.Abstractions.Transactions;{% endif %}
+{% if "Validation" in Pipelines %}using NFramework.Mediator.Abstractions.Validation;{% endif %}
 
-public record {{ Name }}Command : IRequest<{{ Name }}Response>
+namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Commands.{{ Name }};
+
+public record {{ Name }}Command : IRequest<{{ Name }}CommandResult>
     {%- if "Validation" in Pipelines %}, IValidatableRequest{%- endif %}
     {%- if "Logging" in Pipelines %}, ILoggableRequest{%- endif %}
     {%- if "Transaction" in Pipelines %}, ITransactionalRequest{%- endif %}
@@ -15,11 +16,10 @@ public record {{ Name }}Command : IRequest<{{ Name }}Response>
 {
     // TODO: Add command properties here
 {% if "Logging" in Pipelines %}
-    public LogOptions LogOptions => LogOptions.Default;
-{% endif %}{% if "Authorization" in Pipelines %}
+    public LogOptions LogOptions => LogOptions.Default;{% endif %}
+{% if "Authorization" in Pipelines %}
     public IReadOnlyList<string> RequiredRoles => [];
-    public IReadOnlyList<string> RequiredOperations => [];
-{% endif %}{% if "Caching" in Pipelines %}
-    public IReadOnlyList<string> CacheKeyPatterns => [];
-{% endif %}
+    public IReadOnlyList<string> RequiredOperations => [];{% endif %}
+{% if "Caching" in Pipelines %}
+    public IReadOnlyList<string> CacheKeyPatterns => [];{% endif %}
 }

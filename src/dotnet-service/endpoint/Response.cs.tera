@@ -1,0 +1,11 @@
+{%- if AttachToMediator -%}
+using {{ Service }}.Core.Application.Features.{{ Feature }}.{% if OperationType == "Get" %}Queries{% else %}Commands{% endif %}.{{ Name }};
+{%- endif %}
+
+namespace {{ Service }}.Presentation.WebApi.Features.{{ Feature }}.Endpoints.{{ Name }};
+
+internal record {{ Name }}Response
+{
+    // TODO: Map response properties from {{ Name }}{% if OperationType == "Get" %}Query{% else %}Command{% endif %}Result
+    public static {{ Name }}Response From({{ Name }}{% if OperationType == "Get" %}Query{% else %}Command{% endif %}Result result) => new();
+}

@@ -25,4 +25,4 @@ steps:
     destination: 'src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Queries/{{ Name }}/{{ Name }}QueryHandler.cs'
   - action: render
     source: 'content/QueryResponse.cs.tera'
-    destination: 'src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Queries/{{ Name }}/{{ Name }}Response.cs'
+    destination: 'src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Queries/{{ Name }}/{{ Name }}QueryResult.cs'

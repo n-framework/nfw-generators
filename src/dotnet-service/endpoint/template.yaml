@@ -1,0 +1,53 @@
+# yaml-language-server: $schema=../../../template.schema.json
+id: dotnet-service-endpoint
+name: .NET Minimal API Endpoint
+description: Generates a Minimal API HTTP endpoint for a MediatR command or query
+version: 1.0.0
+required_modules:
+  - webapi
+mediator_sources:
+  - command
+  - query
+steps:
+  # 1. Render the inbound request DTO (WebApi-specific, keeps Application layer clean)
+  - action: render
+    source: Request.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Features/{{ Feature }}/Endpoints/{{ Name }}/{{ Name }}Request.cs
+
+  # 2. Render the outbound response DTO (WebApi-specific, decouples from Application return types)
+  - action: render
+    source: Response.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Features/{{ Feature }}/Endpoints/{{ Name }}/{{ Name }}Response.cs
+
+  # 3. Render the endpoint class using C# 12 extension method syntax
+  - action: render
+    source: Endpoint.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Features/{{ Feature }}/Endpoints/{{ Name }}/{{ Name }}Endpoint.cs
+
+  # 4. Create the hand-editable feature registration class (only on first endpoint in this feature).
+  #    Defines Add[Feature]EndpointGroup() — sets the route group prefix and calls Add[Feature]Endpoints().
+  - action: render_if_absent
+    source: FeatureRegistrations.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Features/{{ Feature }}/{{ Feature }}EndpointRegistrations.cs
+
+  # 5. Create the auto-generated feature aggregate (only on first endpoint in this feature).
+  #    Contains Add[Feature]Endpoints() with the inject region for each endpoint's Map call.
+  - action: render_if_absent
+    source: FeatureRegistrations.Nfw.g.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Features/{{ Feature }}/{{ Feature }}EndpointRegistrations.Nfw.g.cs
+
+  # 6. Inject this endpoint's map call into the feature aggregate region
+  - action: inject
+    source: EndpointRegistrationEntry.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Features/{{ Feature }}/{{ Feature }}EndpointRegistrations.Nfw.g.cs
+    injection_target:
+      type: region
+      value: endpoint-registrations
+
+  # 7. Inject the feature group bootstrapper into RouteRegistrationExtensions (idempotent via region)
+  - action: inject
+    source: RouteGroupEntry.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Shared/Routing/RouteRegistrationExtensions.Nfw.g.cs
+    injection_target:
+      type: region
+      value: feature-groups

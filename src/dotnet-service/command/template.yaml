@@ -26,4 +26,4 @@ steps:
     destination: 'src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Commands/{{ Name }}/{{ Name }}CommandHandler.cs'
   - action: render
     source: 'content/CommandResponse.cs.tera'
-    destination: 'src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Commands/{{ Name }}/{{ Name }}Response.cs'
+    destination: 'src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Commands/{{ Name }}/{{ Name }}CommandResult.cs'

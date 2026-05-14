@@ -1,14 +1,12 @@
 using Mediator;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace {{ Namespace }}.Core.Application.Features.{{ Feature }}.Commands.{{ Name }};
+namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Commands.{{ Name }};
 
-public class {{ Name }}CommandHandler : IRequestHandler<{{ Name }}Command, {{ Name }}Response>
+public class {{ Name }}CommandHandler : IRequestHandler<{{ Name }}Command, {{ Name }}CommandResult>
 {
-    public ValueTask<{{ Name }}Response> Handle({{ Name }}Command request, CancellationToken cancellationToken)
+    public ValueTask<{{ Name }}CommandResult> Handle({{ Name }}Command request, CancellationToken cancellationToken)
     {
         // TODO: Implementation goes here
-        return new ValueTask<{{ Name }}Response>(new {{ Name }}Response());
+        return new ValueTask<{{ Name }}CommandResult>(new {{ Name }}CommandResult());
     }
 }
