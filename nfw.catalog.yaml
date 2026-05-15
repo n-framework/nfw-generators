@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/n-framework/nfw-generators/refs/heads/main/schemas/nfw.catalog.schema.json
 templates:
   - identifier: blank-workspace
     displayName: Blank Workspace

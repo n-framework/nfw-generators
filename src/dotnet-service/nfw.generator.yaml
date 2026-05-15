@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=../../template.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/n-framework/nfw-generators/refs/heads/main/schemas/nfw.generator.schema.json
 id: dotnet-service
 name: .NET Service (Clean Architecture)
 description: .NET service template with Domain, Application, Infrastructure, and API layers

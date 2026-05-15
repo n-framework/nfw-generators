@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/n-framework/nfw-generators/refs/heads/main/schemas/nfw.catalog.schema.json",
+  "title": "NFW Catalog",
+  "description": "Schema for nfw.catalog.yaml files listing available templates.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["templates"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional JSON schema pointer for YAML tooling."
+    },
+    "templates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["identifier", "displayName", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "pattern": "^[a-z0-9/]+(?:-[a-z0-9/]+)*$",
+            "description": "Template identifier in kebab-case."
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Human-readable template name."
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Brief description of the template."
+          }
+        }
+      }
+    }
+  }
+}

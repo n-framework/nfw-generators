@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/n-framework/nfw-generators/refs/heads/main/schemas/nfw.workflow.schema.json
+required_modules:
+  - mediator
+inputs:
+  - id: Pipelines
+    type: multiselect
+    prompt: 'Which pipelines do you want to enable?'
+    options:
+      - Validation
+      - Logging
+      - Authorization
+      - Caching
+    default: ['Validation']
+steps:
+  # Render the query class
+  - action: render
+    source: content/Query.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Queries/{{ Name }}/{{ Name }}Query.cs
+  # Render the query handler
+  - action: render
+    source: content/QueryHandler.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Queries/{{ Name }}/{{ Name }}QueryHandler.cs
+  # Render the query result
+  - action: render
+    source: content/QueryResponse.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Queries/{{ Name }}/{{ Name }}QueryResult.cs

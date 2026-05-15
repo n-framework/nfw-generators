@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/n-framework/nfw-generators/refs/heads/main/schemas/nfw.workflow.schema.json
+steps:
+  # Render the repository interface
+  - action: render
+    source: content/interface/IEntityRepository.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Repositories/I{{ Entity }}Repository.cs
+  # Render the repository implementation
+  - action: render
+    source: content/implementation/EntityRepository.cs.tera
+    destination: src/infrastructure/{{ Service }}.Infrastructure.Persistence/Features/{{ Feature }}/Repositories/{{ Entity }}Repository.cs
+  # Inject the DI registration
+  - action: inject
+    source: content/di-registration/registration.tera
+    destination: src/infrastructure/{{ Service }}.Infrastructure.Persistence/InfrastructurePersistenceRegistrationExtensions.Nfw.g.cs
+    injection_target:
+      type: region
+      value: repository-registrations
+  # Inject the DI usings
+  - action: inject
+    source: content/di-registration/usings.tera
+    destination: src/infrastructure/{{ Service }}.Infrastructure.Persistence/InfrastructurePersistenceRegistrationExtensions.Nfw.g.cs
+    injection_target:
+      type: region
+      value: repository-usings

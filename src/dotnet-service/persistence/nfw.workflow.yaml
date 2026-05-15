@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/n-framework/nfw-generators/refs/heads/main/schemas/nfw.workflow.schema.json
+steps:
+  # Render the Infrastructure.Persistence project files
+  - action: render_folder
+    source: content/src/
+    destination: src/
+  # TODO: This reference is currently local for development. Change to NFramework.Persistence.Abstractions package once published.
+  # Add NFramework.Persistence.Abstractions reference to Domain project
+  - action: run_command
+    command: dotnet add src/core/{{ Service }}.Core.Domain reference ../../../src/core-persistence-dotnet/src/NFramework.Persistence.Abstractions/NFramework.Persistence.Abstractions.csproj
+  # TODO: This reference is currently local for development. Change to NFramework.Persistence.EFCore package once published.
+  # Add NFramework.Persistence.EFCore reference to Infrastructure.Persistence project
+  - action: run_command
+    command: dotnet add src/infrastructure/{{ Service }}.Infrastructure.Persistence reference ../../../src/core-persistence-dotnet/src/NFramework.Persistence.EFCore/NFramework.Persistence.EFCore.csproj
+  # Wire the Persistence project into the solution
+  - action: run_command
+    command: dotnet sln add src/infrastructure/{{ Service }}.Infrastructure.Persistence/{{ Service }}.Infrastructure.Persistence.csproj
+  # Add project reference from WebApi to Persistence
+  - action: run_command
+    command: dotnet add src/presentation/{{ Service }}.Presentation.WebApi reference src/infrastructure/{{ Service }}.Infrastructure.Persistence/{{ Service }}.Infrastructure.Persistence.csproj
+  # Inject persistence registration into Program.Nfw.g.cs
+  - action: inject
+    source: content/persistence_registration.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.{{ PresentationLayer }}/Program.Nfw.g.cs
+    injection_target:
+      type: region
+      value: module-registrations
+  # Inject persistence using into Program.Nfw.g.cs
+  - action: inject
+    source: content/persistence_usings.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.{{ PresentationLayer }}/Program.Nfw.g.cs
+    injection_target:
+      type: region
+      value: module-usings

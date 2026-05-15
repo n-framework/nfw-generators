@@ -1,0 +1,6 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/n-framework/nfw-generators/refs/heads/main/schemas/nfw.workflow.schema.json
+steps:
+  # Render all service project files
+  - action: render_folder
+    source: content/
+    destination: .

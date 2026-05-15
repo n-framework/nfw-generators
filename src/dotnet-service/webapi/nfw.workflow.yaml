@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/n-framework/nfw-generators/refs/heads/main/schemas/nfw.workflow.schema.json
+steps:
+  # Render the WebApi project structure
+  - action: render_folder
+    source: content/src/
+    destination: src/
+  # Render the route registration extensions
+  - action: render
+    source: content/src/presentation/{{ Name }}.Presentation.WebApi/Shared/Routing/RouteRegistrationExtensions.cs.tera
+    destination: src/presentation/{{ Name }}.Presentation.WebApi/Shared/Routing/RouteRegistrationExtensions.cs
+  # Render the auto-generated route registration
+  - action: render
+    source: content/src/presentation/{{ Name }}.Presentation.WebApi/Shared/Routing/RouteRegistrationExtensions.Nfw.g.cs.tera
+    destination: src/presentation/{{ Name }}.Presentation.WebApi/Shared/Routing/RouteRegistrationExtensions.Nfw.g.cs
+  # Add the WebApi project to the solution
+  - action: run_command
+    command: dotnet sln add src/presentation/{{ Service }}.Presentation.WebApi/{{ Service }}.Presentation.WebApi.csproj
