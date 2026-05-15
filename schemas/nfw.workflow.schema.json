@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/n-framework/nfw-generators/refs/heads/main/schemas/nfw.workflow.schema.json",
+  "title": "NFW Workflow",
+  "description": "Schema for nfw.workflow.yaml files containing execution steps, inputs, and module requirements.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional JSON schema pointer for YAML tooling."
+    },
+    "required_modules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Modules that must be present before this workflow can execute.",
+      "default": []
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/workflow_input"
+      },
+      "description": "Input parameters for the workflow.",
+      "default": []
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["action"],
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["render", "render_folder", "render_if_absent", "inject", "run_command"]
+          },
+          "source": {
+            "type": "string"
+          },
+          "destination": {
+            "type": "string"
+          },
+          "command": {
+            "type": "string",
+            "description": "Required for run_command action. The command to execute."
+          },
+          "working_directory": {
+            "type": "string",
+            "description": "Optional for run_command action. Directory to run the command in."
+          },
+          "injection_target": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["at_end", "region", "pattern_region"]
+              },
+              "value": {
+                "type": "string"
+              },
+              "start_pattern": {
+                "type": "string"
+              },
+              "end_pattern": {
+                "type": "string"
+              }
+            },
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "region"
+                }
+              }
+            },
+            "then": {
+              "required": ["value"]
+            },
+            "else": {
+              "if": {
+                "properties": {
+                  "type": {
+                    "const": "pattern_region"
+                  }
+                }
+              },
+              "then": {
+                "required": ["start_pattern", "end_pattern"]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "workflow_input": {
+      "type": "object",
+      "required": ["id", "type", "prompt"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-./]+$",
+          "description": "Unique identifier for the input variable."
+        },
+        "type": {
+          "type": "string",
+          "enum": ["text", "password", "confirm", "select", "multiselect", "object", "list"],
+          "description": "Input type."
+        },
+        "prompt": {
+          "type": "string",
+          "description": "Message displayed to the user when prompted."
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional description displayed below the prompt."
+        },
+        "default": {
+          "description": "Optional default value."
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Valid choices for select/multiselect types."
+        },
+        "properties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/workflow_input"
+          },
+          "description": "Nested properties for 'object' type inputs."
+        },
+        "items": {
+          "$ref": "#/$defs/workflow_input",
+          "description": "Element schema for 'list' type inputs."
+        }
+      }
+    }
+  }
+}

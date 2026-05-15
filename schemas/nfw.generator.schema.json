@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/n-framework/nfw-generators/refs/heads/main/schemas/nfw.generator.schema.json",
+  "title": "NFW Generator Metadata",
+  "description": "Schema for root nfw.generator.yaml files containing template metadata and anatomy mappings.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "description", "version"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional JSON schema pointer for YAML tooling."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9/]+(?:-[a-z0-9/]+)*$",
+      "description": "Template identifier in kebab-case (allows slashes)."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$",
+      "description": "SemVer version string."
+    },
+    "language": {
+      "type": "string",
+      "enum": ["csharp", "go", "rust", "neutral"],
+      "description": "Optional. Omit for language-agnostic templates."
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "default": []
+    },
+    "author": {
+      "type": "string",
+      "minLength": 1
+    },
+    "min_cli_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "source_url": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generators": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "type": "string"
+        },
+        "persistence": {
+          "type": "string"
+        },
+        "api": {
+          "type": "string"
+        },
+        "command": {
+          "type": "string"
+        },
+        "mediator": {
+          "type": "string"
+        },
+        "query": {
+          "type": "string"
+        },
+        "repository": {
+          "type": "string"
+        },
+        "entity": {
+          "type": "string"
+        },
+        "webapi": {
+          "type": "string"
+        },
+        "endpoint": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Explicit path mappings for child workflow files."
+    }
+  }
+}
