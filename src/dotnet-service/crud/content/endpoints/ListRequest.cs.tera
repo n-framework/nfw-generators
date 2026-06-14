@@ -1,0 +1,9 @@
+using NFramework.Persistence.Abstractions.Pagination;
+using {{ Service }}.Core.Application.Features.{{ Feature }}.Queries.List{{ Name }}s;
+
+namespace {{ Service }}.Presentation.WebApi.Features.{{ Feature }}.Endpoints.List{{ Name }}s;
+
+internal record List{{ Name }}sRequest(int Index = 0, int Size = 10)
+{
+    internal List{{ Name }}sQuery ToQuery() => new(new Paging(Index, Size));
+}

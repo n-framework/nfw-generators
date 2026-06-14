@@ -1,0 +1,16 @@
+namespace {{ Service }}.Presentation.WebApi.Features.{{ Feature }};
+
+internal static partial class {{ Feature }}EndpointRegistrations
+{
+    private const string RoutePrefix = "/{{ Feature | lower }}";
+
+    extension(RouteGroupBuilder endpoints)
+    {
+        internal RouteGroupBuilder Add{{ Feature }}EndpointGroup()
+        {
+            var group = endpoints.MapGroup(RoutePrefix);
+            group.Add{{ Feature }}Endpoints();
+            return group;
+        }
+    }
+}

@@ -1,0 +1,41 @@
+using Mediator;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using UnionRailway;
+using UnionRailway.AspNetCore;
+using {{ Service }}.Core.Application.Features.{{ Feature }}.Commands.Delete{{ Name }};
+
+namespace {{ Service }}.Presentation.WebApi.Features.{{ Feature }}.Endpoints.Delete{{ Name }};
+
+internal static partial class Delete{{ Name }}Endpoint
+{
+    private const string RoutePath = "/{id}";
+    private const string OperationName = "Delete{{ Name }}";
+    private const string Tag = "{{ Feature | pascal_case }}";
+    private const string OpenApiSummary = "Delete a {{ Name }}";
+
+    extension(IEndpointRouteBuilder endpoints)
+    {
+        internal void MapDelete{{ Name }}Endpoint()
+        {
+            _ = endpoints
+                .MapDelete(
+                    RoutePath,
+                    async ({{ IdType | default(value="Guid") }} id, ISender sender) =>
+                    {
+                        Rail<Delete{{ Name }}CommandResult> result = await sender.Send(new Delete{{ Name }}Command(id)).ConfigureAwait(false);
+                        return result.ToHttpResult();
+                    }
+                )
+                .WithName(OperationName)
+                .WithTags(Tag)
+                .Produces<Delete{{ Name }}CommandResult>(StatusCodes.Status200OK)
+                .ProducesProblem(StatusCodes.Status404NotFound)
+                .AddOpenApiOperationTransformer((operation, context, ct) =>
+                {
+                    operation.Summary = OpenApiSummary;
+                    return Task.CompletedTask;
+                });
+        }
+    }
+}

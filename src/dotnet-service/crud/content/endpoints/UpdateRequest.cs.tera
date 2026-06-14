@@ -1,0 +1,27 @@
+using {{ Service }}.Core.Application.Features.{{ Feature }}.Commands.Update{{ Name }};
+
+namespace {{ Service }}.Presentation.WebApi.Features.{{ Feature }}.Endpoints.Update{{ Name }};
+
+internal record Update{{ Name }}Request
+{
+{%- set audit_props = ["CreatedAt", "UpdatedAt", "IsDeleted", "DeletedAt"] -%}
+{%- if Properties %}
+{%- for prop in Properties %}
+{%- if prop.name not in audit_props %}
+    public required {{ prop.type }}{% if prop.nullable %}?{% endif %} {{ prop.name }} { get; init; }
+{%- endif %}
+{%- endfor %}
+{%- endif %}
+
+    internal Update{{ Name }}Command ToCommand({{ IdType | default(value="Guid") }} id) => new()
+    {
+        Id = id,
+        {%- if Properties %}
+        {%- for prop in Properties %}
+        {%- if prop.name not in audit_props %}
+        {{ prop.name }} = {{ prop.name }},
+        {%- endif %}
+        {%- endfor %}
+        {%- endif %}
+    };
+}

@@ -3,20 +3,20 @@ using {{ Name }}.Presentation.WebApi.Shared.HealthCheck.Extensions;
 using {{ Name }}.Presentation.WebApi.Shared.Middleware;
 using {{ Name }}.Presentation.WebApi.Shared.OpenApi.Extensions;
 using {{ Name }}.Presentation.WebApi.Shared.Routing;
+using UnionRailway.AspNetCore;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddApplicationLayer();
 builder.AddNfwModules();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddRailway();
 builder.Services.AddOpenApiSupport(builder.Configuration);
 builder.Services.AddApplicationHealthChecks();
 builder.Services.AddDefaultMiddleware();
 
 WebApplication app = builder.Build();
 
-// Configure the HTTP request pipeline.
 app.UseDefaultMiddleware();
 
 if (app.Environment.IsDevelopment())

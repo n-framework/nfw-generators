@@ -1,0 +1,41 @@
+using Mediator;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using UnionRailway;
+using UnionRailway.AspNetCore;
+using {{ Service }}.Core.Application.Features.{{ Feature }}.Commands.Create{{ Name }};
+
+namespace {{ Service }}.Presentation.WebApi.Features.{{ Feature }}.Endpoints.Create{{ Name }};
+
+internal static partial class Create{{ Name }}Endpoint
+{
+    private const string RoutePath = "/";
+    private const string OperationName = "Create{{ Name }}";
+    private const string Tag = "{{ Feature | pascal_case }}";
+    private const string OpenApiSummary = "Create a new {{ Name }}";
+
+    extension(IEndpointRouteBuilder endpoints)
+    {
+        internal void MapCreate{{ Name }}Endpoint()
+        {
+            _ = endpoints
+                .MapPost(
+                    RoutePath,
+                    async (Create{{ Name }}Request request, ISender sender) =>
+                    {
+                        Rail<Create{{ Name }}CommandResult> result = await sender.Send(request.ToCommand()).ConfigureAwait(false);
+                        return result.ToHttpResult(createdUri: $"/{{ Name | lower }}s/{result.Match(r => r.Id, _ => default)}");
+                    }
+                )
+                .WithName(OperationName)
+                .WithTags(Tag)
+                .Produces<Create{{ Name }}CommandResult>(StatusCodes.Status201Created)
+                .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
+                .AddOpenApiOperationTransformer((operation, context, ct) =>
+                {
+                    operation.Summary = OpenApiSummary;
+                    return Task.CompletedTask;
+                });
+        }
+    }
+}

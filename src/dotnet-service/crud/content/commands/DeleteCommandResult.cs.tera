@@ -1,0 +1,9 @@
+namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Commands.Delete{{ Name }};
+
+public record Delete{{ Name }}CommandResult(
+    {{ IdType | default(value="Guid") }} Id
+    {%- if EntityType == "soft_deletable_entity" %},
+    bool IsDeleted,
+    DateTime? DeletedAt
+    {%- endif %}
+);

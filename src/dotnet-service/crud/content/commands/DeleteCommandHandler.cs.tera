@@ -1,0 +1,32 @@
+using Mediator;
+using UnionRailway;
+using {{ Service }}.Core.Application.Contracts.Persistence;
+using {{ Service }}.Core.Domain.Entities;
+
+namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Commands.Delete{{ Name }};
+
+public class Delete{{ Name }}CommandHandler(I{{ Name }}Repository repository) : IRequestHandler<Delete{{ Name }}Command, Rail<Delete{{ Name }}CommandResult>>
+{
+    public async ValueTask<Rail<Delete{{ Name }}CommandResult>> Handle(Delete{{ Name }}Command request, CancellationToken cancellationToken)
+    {
+        Rail<{{ Name }}> getResult = await repository.GetByIdAsync(request.Id, cancellationToken);
+        if (!getResult.IsSuccess(out {{ Name }} entity, out UnionError? getError))
+            return getError.GetValueOrDefault().ToFail<Delete{{ Name }}CommandResult>();
+
+        Rail<{{ Name }}> deleteResult = await repository.DeleteAsync(entity, cancellationToken);
+        if (!deleteResult.IsSuccess(out _, out UnionError? deleteError))
+            return deleteError.GetValueOrDefault().ToFail<Delete{{ Name }}CommandResult>();
+
+        Rail<int> saveResult = await repository.SaveChangesAsync(cancellationToken);
+        if (!saveResult.IsSuccess(out _, out UnionError? saveError))
+            return saveError.GetValueOrDefault().ToFail<Delete{{ Name }}CommandResult>();
+
+        return new Delete{{ Name }}CommandResult(
+            entity.Id
+            {%- if EntityType == "soft_deletable_entity" %},
+            entity.IsDeleted,
+            entity.DeletedAt
+            {%- endif %}
+        );
+    }
+}

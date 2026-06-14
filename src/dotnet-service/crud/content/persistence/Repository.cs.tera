@@ -1,0 +1,9 @@
+using NFramework.Persistence.Abstractions.Repositories;
+using {{ Service }}.Core.Domain.Entities;
+
+namespace {{ Service }}.Core.Application.Contracts.Persistence;
+
+public interface I{{ Name }}Repository
+    : IReadRepository<{{ Name }}, {{ IdType | default(value="Guid") }}>,
+      IWriteRepository<{{ Name }}, {{ IdType | default(value="Guid") }}>,
+      IUnitOfWork;

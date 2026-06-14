@@ -1,0 +1,11 @@
+namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Commands.Update{{ Name }};
+
+public record Update{{ Name }}CommandResult(
+    {{ IdType | default(value="Guid") }} Id{%- for prop in Properties %},
+    {{ prop.type }}{% if prop.nullable %}?{% endif %} {{ prop.name }}
+    {%- endfor %}
+    {%- if EntityType == "auditable_entity" or EntityType == "soft_deletable_entity" %},
+    DateTime CreatedAt,
+    DateTime? UpdatedAt
+    {%- endif %}
+);
