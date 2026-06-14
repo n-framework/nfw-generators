@@ -1,10 +1,7 @@
-using UnionRailway;
-using {{ Service }}.Core.Domain.Entities;
-
 namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Specifications;
 
 /// <summary>
-/// Business rule specifications for <see cref="{{ Name }}"/>.
+/// Business rule specifications for {{ Name }}.
 /// Repository handles NotFound validation; add domain-specific rules here.
 /// </summary>
 public static class {{ Name }}Specifications

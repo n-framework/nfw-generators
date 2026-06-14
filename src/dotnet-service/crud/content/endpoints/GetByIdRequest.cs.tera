@@ -1,8 +1,0 @@
-using {{ Service }}.Core.Application.Features.{{ Feature }}.Queries.Get{{ Name }}ById;
-
-namespace {{ Service }}.Presentation.WebApi.Features.{{ Feature }}.Endpoints.Get{{ Name }}ById;
-
-internal record Get{{ Name }}ByIdRequest({{ IdType | default(value="Guid") }} Id)
-{
-    internal Get{{ Name }}ByIdQuery ToQuery() => new(Id);
-}
