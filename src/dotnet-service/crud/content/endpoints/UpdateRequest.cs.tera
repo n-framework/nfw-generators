@@ -7,7 +7,7 @@ internal record Update{{ Name }}Request
 {%- set audit_props = ["CreatedAt", "UpdatedAt", "IsDeleted", "DeletedAt"] -%}
 {%- if Properties %}
 {%- for prop in Properties %}
-{%- if prop.name not in audit_props %}
+{%- if prop.name != "Id" and prop.name not in audit_props %}
     public required {{ prop.type }}{% if prop.nullable %}?{% endif %} {{ prop.name }} { get; init; }
 {%- endif %}
 {%- endfor %}
@@ -18,7 +18,7 @@ internal record Update{{ Name }}Request
         Id = id,
         {%- if Properties %}
         {%- for prop in Properties %}
-        {%- if prop.name not in audit_props %}
+        {%- if prop.name != "Id" and prop.name not in audit_props %}
         {{ prop.name }} = {{ prop.name }},
         {%- endif %}
         {%- endfor %}

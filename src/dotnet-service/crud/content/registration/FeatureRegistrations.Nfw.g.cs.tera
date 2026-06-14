@@ -2,6 +2,11 @@
 // This file is managed by the NFramework CLI. Do not modify manually.
 
 // <nfw:endpoint-usings:start>
+using {{ Service }}.Presentation.WebApi.Features.{{ Feature }}.Endpoints.Create{{ Name }};
+using {{ Service }}.Presentation.WebApi.Features.{{ Feature }}.Endpoints.Get{{ Name }}ById;
+using {{ Service }}.Presentation.WebApi.Features.{{ Feature }}.Endpoints.List{{ Name }}s;
+using {{ Service }}.Presentation.WebApi.Features.{{ Feature }}.Endpoints.Update{{ Name }};
+using {{ Service }}.Presentation.WebApi.Features.{{ Feature }}.Endpoints.Delete{{ Name }};
 // <nfw:endpoint-usings:end>
 
 namespace {{ Service }}.Presentation.WebApi.Features.{{ Feature }};

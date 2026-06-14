@@ -17,9 +17,11 @@ public record Create{{ Name }}Command : IRailRequest<Create{{ Name }}CommandResu
 {%- endfor %}
 
     internal {{ Name }} ToEntity() => new(
+        {%- set_global is_first_entity_arg = true -%}
         {%- for prop in Properties %}
         {%- if prop.name != "Id" and prop.name not in audit_props %}
-        {{ prop.name }}{% if not loop.last %},{% endif %}
+        {%- if not is_first_entity_arg %},{% endif %}{{ prop.name }}
+        {%- set_global is_first_entity_arg = false -%}
         {%- endif %}
         {%- endfor %}
     );
