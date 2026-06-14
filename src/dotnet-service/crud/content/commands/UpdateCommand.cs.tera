@@ -13,7 +13,7 @@ public record Update{{ Name }}Command : IRailRequest<Update{{ Name }}CommandResu
 {%- set audit_props = ["CreatedAt", "UpdatedAt", "IsDeleted", "DeletedAt"] -%}
 {%- if Properties %}
 {%- for prop in Properties %}
-{%- if prop.name not in audit_props %}
+{%- if prop.name != "Id" and prop.name not in audit_props %}
     public required {{ prop.type }}{% if prop.nullable %}?{% endif %} {{ prop.name }} { get; init; }
 {%- endif %}
 {%- endfor %}
@@ -23,7 +23,7 @@ public record Update{{ Name }}Command : IRailRequest<Update{{ Name }}CommandResu
     {
         {%- if Properties %}
         {%- for prop in Properties %}
-        {%- if prop.name not in audit_props %}
+        {%- if prop.name != "Id" and prop.name not in audit_props %}
         entity.{{ prop.name }} = {{ prop.name }};
         {%- endif %}
         {%- endfor %}

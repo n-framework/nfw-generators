@@ -1,8 +1,11 @@
 namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Commands.Create{{ Name }};
 
+{%- set audit_props = ["CreatedAt", "UpdatedAt", "IsDeleted", "DeletedAt"] -%}
 public record Create{{ Name }}CommandResult(
-    {{ IdType | default(value="Guid") }} Id{%- for prop in Properties %},
+    {{ IdType | default(value="Guid") }} Id{%- for prop in Properties %}
+    {%- if prop.name != "Id" and prop.name not in audit_props %},
     {{ prop.type }}{% if prop.nullable %}?{% endif %} {{ prop.name }}
+    {%- endif %}
     {%- endfor %}
     {%- if EntityType == "auditable_entity" or EntityType == "soft_deletable_entity" %},
     DateTime CreatedAt

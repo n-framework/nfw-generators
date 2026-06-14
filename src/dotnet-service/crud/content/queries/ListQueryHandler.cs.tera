@@ -7,6 +7,8 @@ using {{ Service }}.Core.Domain.Entities;
 
 namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Queries.List{{ Name }}s;
 
+{%- set audit_props = ["CreatedAt", "UpdatedAt", "IsDeleted", "DeletedAt"] -%}
+
 public class List{{ Name }}sQueryHandler(I{{ Name }}Repository repository) : IRequestHandler<List{{ Name }}sQuery, Rail<List{{ Name }}sQueryResult>>
 {
     public async ValueTask<Rail<List{{ Name }}sQueryResult>> Handle(List{{ Name }}sQuery request, CancellationToken cancellationToken)
@@ -19,8 +21,10 @@ public class List{{ Name }}sQueryHandler(I{{ Name }}Repository repository) : IRe
 
         PaginatedList<{{ Name }}Dto> paginatedDtos = new(
             paginatedEntities.Items.Select(entity => new {{ Name }}Dto(
-                entity.Id{%- for prop in Properties %},
+                entity.Id{%- for prop in Properties %}
+                {%- if prop.name != "Id" and prop.name not in audit_props %},
                 entity.{{ prop.name }}
+                {%- endif %}
                 {%- endfor %}
                 {%- if EntityType == "auditable_entity" or EntityType == "soft_deletable_entity" %},
                 entity.CreatedAt,

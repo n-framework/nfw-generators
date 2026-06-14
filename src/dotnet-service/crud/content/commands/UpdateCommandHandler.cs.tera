@@ -5,6 +5,8 @@ using {{ Service }}.Core.Domain.Entities;
 
 namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Commands.Update{{ Name }};
 
+{%- set audit_props = ["CreatedAt", "UpdatedAt", "IsDeleted", "DeletedAt"] -%}
+
 public class Update{{ Name }}CommandHandler(I{{ Name }}Repository repository) : IRequestHandler<Update{{ Name }}Command, Rail<Update{{ Name }}CommandResult>>
 {
     public async ValueTask<Rail<Update{{ Name }}CommandResult>> Handle(Update{{ Name }}Command request, CancellationToken cancellationToken)
@@ -24,8 +26,10 @@ public class Update{{ Name }}CommandHandler(I{{ Name }}Repository repository) : 
             return saveError.GetValueOrDefault().ToFail<Update{{ Name }}CommandResult>();
 
         return new Update{{ Name }}CommandResult(
-            entity.Id{%- for prop in Properties %},
+            entity.Id{%- for prop in Properties %}
+            {%- if prop.name != "Id" and prop.name not in audit_props %},
             entity.{{ prop.name }}
+            {%- endif %}
             {%- endfor %}
             {%- if EntityType == "auditable_entity" or EntityType == "soft_deletable_entity" %},
             entity.CreatedAt,
