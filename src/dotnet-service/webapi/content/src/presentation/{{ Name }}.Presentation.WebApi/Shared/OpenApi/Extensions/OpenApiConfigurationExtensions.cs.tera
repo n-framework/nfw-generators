@@ -13,7 +13,7 @@ internal static class OpenApiConfigurationExtensions
 				return services;
 
 			Rail<{{ Name }}.Presentation.WebApi.Shared.OpenApi.Models.OpenApiConfiguration> configRail = configuration.GetOpenApiConfiguration();
-			if (!configRail.IsSuccess(out {{ Name }}.Presentation.WebApi.Shared.OpenApi.Models.OpenApiConfiguration openApi, out _))
+			if (!configRail.IsSuccess(out {{ Name }}.Presentation.WebApi.Shared.OpenApi.Models.OpenApiConfiguration? openApi, out _))
 				return services;
 
 			_ = services.AddOpenApi(options =>
@@ -23,11 +23,11 @@ internal static class OpenApiConfigurationExtensions
 					{
 						document.Info = new()
 						{
-							Title = openApi.Title,
-							Version = openApi.Version,
-							Description = openApi.Description,
-							Contact = new() { Name = openApi.ContactName, Email = openApi.ContactEmail },
-							License = new() { Name = openApi.LicenseName, Url = openApi.LicenseUrl },
+							Title = openApi!.Title,
+							Version = openApi!.Version,
+							Description = openApi!.Description,
+							Contact = new() { Name = openApi!.ContactName, Email = openApi!.ContactEmail },
+							License = new() { Name = openApi!.LicenseName, Url = openApi!.LicenseUrl },
 						};
 						return Task.CompletedTask;
 					}
