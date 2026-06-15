@@ -19,3 +19,4 @@ generators:
   service: ./service/
   webapi: ./webapi/
   endpoint: ./endpoint/
+  crud: ./crud/

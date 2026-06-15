@@ -1,0 +1,34 @@
+using Mediator;
+using UnionRailway;
+using {{ Service }}.Core.Application.Contracts.Persistence;
+using {{ Service }}.Core.Domain.Features.{{ Feature }}.Entities;
+
+namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Queries.Get{{ Name }}ById;
+
+{%- set audit_props = ["CreatedAt", "UpdatedAt", "IsDeleted", "DeletedAt"] -%}
+
+public class Get{{ Name }}ByIdQueryHandler(I{{ Name }}Repository repository) : IRequestHandler<Get{{ Name }}ByIdQuery, Rail<Get{{ Name }}ByIdQueryResult>>
+{
+    public async ValueTask<Rail<Get{{ Name }}ByIdQueryResult>> Handle(Get{{ Name }}ByIdQuery request, CancellationToken cancellationToken)
+    {
+        Rail<{{ Name }}> getResult = await repository.GetByIdAsync(request.Id, cancellationToken);
+        if (!getResult.IsSuccess(out {{ Name }}? entity, out UnionError? error))
+            return error.GetValueOrDefault().ToFail<Get{{ Name }}ByIdQueryResult>();
+
+        return new Get{{ Name }}ByIdQueryResult(new {{ Name }}Dto(
+            entity!.Id{%- for prop in Properties %}
+            {%- if prop.name != "Id" and prop.name not in audit_props %},
+            entity.{{ prop.name }}
+            {%- endif %}
+            {%- endfor %}
+            {%- if EntityType == "auditable_entity" or EntityType == "soft_deletable_entity" %},
+            entity.CreatedAt,
+            entity.UpdatedAt
+            {%- endif %}
+            {%- if EntityType == "soft_deletable_entity" %},
+            entity.IsDeleted,
+            entity.DeletedAt
+            {%- endif %}
+        ));
+    }
+}

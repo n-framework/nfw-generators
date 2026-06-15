@@ -1,0 +1,1 @@
+apiGroup.Add{{ Feature }}EndpointGroup();

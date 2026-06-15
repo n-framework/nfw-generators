@@ -1,3 +1,6 @@
+using UnionRailway;
+using UnionRailway.AspNetCore;
+
 namespace {{ Name }}.Presentation.WebApi.Shared.OpenApi.Extensions;
 
 internal static class OpenApiConfigurationExtensions
@@ -6,9 +9,12 @@ internal static class OpenApiConfigurationExtensions
 	{
 		internal IServiceCollection AddOpenApiSupport(IConfiguration configuration)
 		{
-			ArgumentNullException.ThrowIfNull(configuration);
+			if (configuration is null)
+				return services;
 
-			var openApi = configuration.GetOpenApiConfiguration();
+			Rail<{{ Name }}.Presentation.WebApi.Shared.OpenApi.Models.OpenApiConfiguration> configRail = configuration.GetOpenApiConfiguration();
+			if (!configRail.IsSuccess(out {{ Name }}.Presentation.WebApi.Shared.OpenApi.Models.OpenApiConfiguration? openApi, out _))
+				return services;
 
 			_ = services.AddOpenApi(options =>
 			{
@@ -17,11 +23,11 @@ internal static class OpenApiConfigurationExtensions
 					{
 						document.Info = new()
 						{
-							Title = openApi.Title,
-							Version = openApi.Version,
-							Description = openApi.Description,
-							Contact = new() { Name = openApi.ContactName, Email = openApi.ContactEmail },
-							License = new() { Name = openApi.LicenseName, Url = openApi.LicenseUrl },
+							Title = openApi!.Title,
+							Version = openApi!.Version,
+							Description = openApi!.Description,
+							Contact = new() { Name = openApi!.ContactName, Email = openApi!.ContactEmail },
+							License = new() { Name = openApi!.LicenseName, Url = openApi!.LicenseUrl },
 						};
 						return Task.CompletedTask;
 					}
@@ -34,17 +40,23 @@ internal static class OpenApiConfigurationExtensions
 
 	extension(IConfiguration configuration)
 	{
-		/// <exception cref="InvalidOperationException">Thrown when OpenApi section is missing or invalid.</exception>
-		internal {{ Name }}.Presentation.WebApi.Shared.OpenApi.Models.OpenApiConfiguration GetOpenApiConfiguration()
+		internal Rail<{{ Name }}.Presentation.WebApi.Shared.OpenApi.Models.OpenApiConfiguration> GetOpenApiConfiguration()
 		{
-			ArgumentNullException.ThrowIfNull(configuration);
+			if (configuration is null)
+				return new UnionError.SystemFailure("Configuration instance is null.");
 
-			var section = configuration.GetSection("OpenApi");
-			return section.Get<{{ Name }}.Presentation.WebApi.Shared.OpenApi.Models.OpenApiConfiguration>()
-				?? throw new InvalidOperationException(
-					"OpenApi configuration section is missing. "
-						+ "Ensure 'OpenApi' section with all required fields exists in configuration."
+			IConfigurationSection section = configuration.GetSection("OpenApi");
+			{{ Name }}.Presentation.WebApi.Shared.OpenApi.Models.OpenApiConfiguration? openApiConfig =
+				section.Get<{{ Name }}.Presentation.WebApi.Shared.OpenApi.Models.OpenApiConfiguration>();
+
+			if (openApiConfig is null)
+				return new UnionError.Custom(
+					Code: "CONFIG_MISSING_SECTION",
+					Message: "OpenApi configuration section is missing. Ensure 'OpenApi' section with all required fields exists in configuration.",
+					StatusCode: 500
 				);
+
+			return openApiConfig;
 		}
 	}
 

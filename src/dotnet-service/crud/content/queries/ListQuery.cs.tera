@@ -1,0 +1,20 @@
+using NFramework.Mediator.Abstractions;
+using NFramework.Persistence.Abstractions.Pagination;
+{% if secured %}using NFramework.Mediator.Abstractions.Authorization;{% endif %}
+{% if cached %}using NFramework.Mediator.Abstractions.Caching;{% endif %}
+
+namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Queries.List{{ Name }}s;
+
+public record List{{ Name }}sQuery(Paging Paging) : IRailRequest<List{{ Name }}sQueryResult>
+    {%- if secured %}, ISecuredRequest{%- endif %}
+    {%- if cached %}, ICacheableRequest{%- endif %}
+{
+{% if secured %}
+    public IReadOnlyList<string> RequiredRoles => [];
+    public IReadOnlyList<string> RequiredOperations => [];{% endif %}
+{% if cached %}
+    public string? CacheKeyPrefix => $"{{ Name | lower }}s_{Paging.Index}_{Paging.Size}";
+    public int CacheDurationMinutes => 5;
+    public int? SlidingExpirationMinutes => null;
+    public string? CacheGroupKey => "{{ Name | lower }}";{% endif %}
+}

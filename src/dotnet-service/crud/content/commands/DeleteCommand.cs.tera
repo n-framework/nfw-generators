@@ -1,0 +1,16 @@
+using NFramework.Mediator.Abstractions;
+{% if secured %}using NFramework.Mediator.Abstractions.Authorization;{% endif %}
+{% if cached %}using NFramework.Mediator.Abstractions.Caching;{% endif %}
+
+namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Commands.Delete{{ Name }};
+
+public record Delete{{ Name }}Command({{ IdType | default(value="Guid") }} Id) : IRailRequest<Delete{{ Name }}CommandResult>
+    {%- if secured %}, ISecuredRequest{%- endif %}
+    {%- if cached %}, ICacheRemoverRequest{%- endif %}
+{
+{% if secured %}
+    public IReadOnlyList<string> RequiredRoles => [];
+    public IReadOnlyList<string> RequiredOperations => [];{% endif %}
+{% if cached %}
+    public IReadOnlyList<string> CacheKeyPatterns => ["{{ Name | lower }}*", $"{{ Name | lower }}_{Id}"];{% endif %}
+}

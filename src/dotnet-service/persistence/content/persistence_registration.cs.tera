@@ -1,1 +1,2 @@
-builder.Services.AddInfrastructureServices(builder.Configuration.GetInfrastructureConfiguration());
+builder.Services.AddInfrastructureServices(builder.Configuration.GetInfrastructureConfiguration()
+	.Match(config => config, error => throw new InvalidOperationException(error.ToString())));

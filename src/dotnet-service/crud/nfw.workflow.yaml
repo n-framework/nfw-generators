@@ -1,0 +1,150 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/n-framework/nfw-generators/refs/heads/main/schemas/nfw.workflow.schema.json
+required_modules:
+  - mediator
+  - persistence
+  - webapi
+inputs:
+  - id: no-api
+    type: confirm
+    prompt: Skip generating API Endpoints?
+    default: false
+  - id: secured
+    type: confirm
+    prompt: Include security markers?
+    default: false
+  - id: cached
+    type: confirm
+    prompt: Include caching markers?
+    default: false
+steps:
+  # ==========================================
+  # 1. COMMANDS (Create, Update, Delete)
+  # ==========================================
+  - action: render
+    source: content/commands/CreateCommand.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Commands/Create{{ Name }}/Create{{ Name }}Command.cs
+  - action: render
+    source: content/commands/CreateCommandHandler.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Commands/Create{{ Name }}/Create{{ Name }}CommandHandler.cs
+  - action: render
+    source: content/commands/CreateCommandResult.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Commands/Create{{ Name }}/Create{{ Name }}CommandResult.cs
+
+  - action: render
+    source: content/commands/UpdateCommand.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Commands/Update{{ Name }}/Update{{ Name }}Command.cs
+  - action: render
+    source: content/commands/UpdateCommandHandler.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Commands/Update{{ Name }}/Update{{ Name }}CommandHandler.cs
+  - action: render
+    source: content/commands/UpdateCommandResult.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Commands/Update{{ Name }}/Update{{ Name }}CommandResult.cs
+
+  - action: render
+    source: content/commands/DeleteCommand.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Commands/Delete{{ Name }}/Delete{{ Name }}Command.cs
+  - action: render
+    source: content/commands/DeleteCommandHandler.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Commands/Delete{{ Name }}/Delete{{ Name }}CommandHandler.cs
+  - action: render
+    source: content/commands/DeleteCommandResult.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Commands/Delete{{ Name }}/Delete{{ Name }}CommandResult.cs
+
+  # ==========================================
+  # 2. QUERIES (GetById, List)
+  # ==========================================
+  - action: render
+    source: content/queries/GetByIdQuery.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Queries/Get{{ Name }}ById/Get{{ Name }}ByIdQuery.cs
+  - action: render
+    source: content/queries/GetByIdQueryHandler.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Queries/Get{{ Name }}ById/Get{{ Name }}ByIdQueryHandler.cs
+  - action: render
+    source: content/queries/GetByIdQueryResult.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Queries/Get{{ Name }}ById/Get{{ Name }}ByIdQueryResult.cs
+
+  - action: render
+    source: content/queries/ListQuery.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Queries/List{{ Name }}s/List{{ Name }}sQuery.cs
+  - action: render
+    source: content/queries/ListQueryHandler.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Queries/List{{ Name }}s/List{{ Name }}sQueryHandler.cs
+  - action: render
+    source: content/queries/ListQueryResult.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Queries/List{{ Name }}s/List{{ Name }}sQueryResult.cs
+
+  # ==========================================
+  # 3. PERSISTENCE
+  # ==========================================
+  - action: render
+    source: content/persistence/Repository.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Contracts/Persistence/I{{ Name }}Repository.cs
+
+  # ==========================================
+  # 4. SPECIFICATIONS (Business Rules)
+  # ==========================================
+  - action: render
+    source: content/specifications/Specifications.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/Features/{{ Feature }}/Specifications/{{ Name }}Specifications.cs
+
+  # ==========================================
+  # 5. ENDPOINTS (per-operation, Rail<T> via WithRailwayFilter)
+  # ==========================================
+  # Create
+  - action: render
+    source: content/endpoints/CreateEndpoint.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Features/{{ Feature }}/Endpoints/Create{{ Name }}/Create{{ Name }}Endpoint.cs
+  - action: render
+    source: content/endpoints/CreateRequest.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Features/{{ Feature }}/Endpoints/Create{{ Name }}/Create{{ Name }}Request.cs
+
+  # GetById
+  - action: render
+    source: content/endpoints/GetByIdEndpoint.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Features/{{ Feature }}/Endpoints/Get{{ Name }}ById/Get{{ Name }}ByIdEndpoint.cs
+
+  # List
+  - action: render
+    source: content/endpoints/ListEndpoint.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Features/{{ Feature }}/Endpoints/List{{ Name }}s/List{{ Name }}sEndpoint.cs
+  - action: render
+    source: content/endpoints/ListRequest.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Features/{{ Feature }}/Endpoints/List{{ Name }}s/List{{ Name }}sRequest.cs
+
+  # Update
+  - action: render
+    source: content/endpoints/UpdateEndpoint.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Features/{{ Feature }}/Endpoints/Update{{ Name }}/Update{{ Name }}Endpoint.cs
+  - action: render
+    source: content/endpoints/UpdateRequest.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Features/{{ Feature }}/Endpoints/Update{{ Name }}/Update{{ Name }}Request.cs
+
+  # Delete
+  - action: render
+    source: content/endpoints/DeleteEndpoint.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Features/{{ Feature }}/Endpoints/Delete{{ Name }}/Delete{{ Name }}Endpoint.cs
+
+  # ==========================================
+  # 6. ENDPOINT REGISTRATIONS
+  # ==========================================
+  - action: render_if_absent
+    source: content/registration/FeatureRegistrations.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Features/{{ Feature }}/{{ Feature }}EndpointRegistrations.cs
+
+  - action: render
+    source: content/registration/FeatureRegistrations.Nfw.g.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Features/{{ Feature }}/{{ Feature }}EndpointRegistrations.Nfw.g.cs
+
+  - action: inject
+    source: content/registration/RouteGroupEntry.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Shared/Routing/RouteRegistrationExtensions.Nfw.g.cs
+    injection_target:
+      type: region
+      value: feature-groups
+
+  - action: inject
+    source: content/registration/FeatureUsingEntry.cs.tera
+    destination: src/presentation/{{ Service }}.Presentation.WebApi/Shared/Routing/RouteRegistrationExtensions.Nfw.g.cs
+    injection_target:
+      type: region
+      value: feature-group-usings

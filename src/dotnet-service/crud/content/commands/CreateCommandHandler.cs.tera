@@ -1,0 +1,35 @@
+using Mediator;
+using UnionRailway;
+using {{ Service }}.Core.Application.Contracts.Persistence;
+using {{ Service }}.Core.Domain.Features.{{ Feature }}.Entities;
+
+namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Commands.Create{{ Name }};
+
+{%- set audit_props = ["CreatedAt", "UpdatedAt", "IsDeleted", "DeletedAt"] -%}
+
+public class Create{{ Name }}CommandHandler(I{{ Name }}Repository repository) : IRequestHandler<Create{{ Name }}Command, Rail<Create{{ Name }}CommandResult>>
+{
+    public async ValueTask<Rail<Create{{ Name }}CommandResult>> Handle(Create{{ Name }}Command request, CancellationToken cancellationToken)
+    {
+        {{ Name }} entity = request.ToEntity();
+
+        Rail<{{ Name }}> addResult = await repository.AddAsync(entity, cancellationToken);
+        if (!addResult.IsSuccess(out _, out UnionError? addError))
+            return addError.GetValueOrDefault().ToFail<Create{{ Name }}CommandResult>();
+
+        Rail<int> saveResult = await repository.SaveChangesAsync(cancellationToken);
+        if (!saveResult.IsSuccess(out _, out UnionError? saveError))
+            return saveError.GetValueOrDefault().ToFail<Create{{ Name }}CommandResult>();
+
+        return new Create{{ Name }}CommandResult(
+            entity.Id{%- for prop in Properties %}
+            {%- if prop.name != "Id" and prop.name not in audit_props %},
+            entity.{{ prop.name }}
+            {%- endif %}
+            {%- endfor %}
+            {%- if EntityType == "auditable_entity" or EntityType == "soft_deletable_entity" %},
+            entity.CreatedAt
+            {%- endif %}
+        );
+    }
+}

@@ -1,3 +1,5 @@
+using UnionRailway.AspNetCore;
+
 namespace {{ Name }}.Presentation.WebApi.Shared.Middleware;
 
 internal static class MiddlewareRegistrationExtensions
@@ -20,7 +22,7 @@ internal static class MiddlewareRegistrationExtensions
 
     internal static WebApplication UseDefaultMiddleware(this WebApplication app)
     {
-        app.UseExceptionHandler();
+        app.UseRailwayExceptionHandler();
         app.UseStatusCodePages();
         app.UseCors();
 

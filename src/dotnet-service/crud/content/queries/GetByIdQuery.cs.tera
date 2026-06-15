@@ -1,0 +1,19 @@
+using NFramework.Mediator.Abstractions;
+{% if secured %}using NFramework.Mediator.Abstractions.Authorization;{% endif %}
+{% if cached %}using NFramework.Mediator.Abstractions.Caching;{% endif %}
+
+namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Queries.Get{{ Name }}ById;
+
+public record Get{{ Name }}ByIdQuery({{ IdType | default(value="Guid") }} Id) : IRailRequest<Get{{ Name }}ByIdQueryResult>
+    {%- if secured %}, ISecuredRequest{%- endif %}
+    {%- if cached %}, ICacheableRequest{%- endif %}
+{
+{% if secured %}
+    public IReadOnlyList<string> RequiredRoles => [];
+    public IReadOnlyList<string> RequiredOperations => [];{% endif %}
+{% if cached %}
+    public string? CacheKeyPrefix => $"{{ Name | lower }}_{Id}";
+    public int CacheDurationMinutes => 5;
+    public int? SlidingExpirationMinutes => null;
+    public string? CacheGroupKey => "{{ Name | lower }}";{% endif %}
+}

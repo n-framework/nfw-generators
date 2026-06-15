@@ -1,0 +1,38 @@
+using NFramework.Mediator.Abstractions;
+{% if secured %}using NFramework.Mediator.Abstractions.Authorization;{% endif %}
+{% if cached %}using NFramework.Mediator.Abstractions.Caching;{% endif %}
+using {{ Service }}.Core.Domain.Features.{{ Feature }}.Entities;
+
+namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Commands.Update{{ Name }};
+
+public record Update{{ Name }}Command : IRailRequest<Update{{ Name }}CommandResult>
+    {%- if secured %}, ISecuredRequest{%- endif %}
+    {%- if cached %}, ICacheRemoverRequest{%- endif %}
+{
+    public required {{ IdType | default(value="Guid") }} Id { get; init; }
+{%- set audit_props = ["CreatedAt", "UpdatedAt", "IsDeleted", "DeletedAt"] -%}
+{%- if Properties %}
+{%- for prop in Properties %}
+{%- if prop.name != "Id" and prop.name not in audit_props %}
+    public required {{ prop.type }}{% if prop.nullable %}?{% endif %} {{ prop.name }} { get; init; }
+{%- endif %}
+{%- endfor %}
+{%- endif %}
+
+    internal {{ Name }} ApplyTo({{ Name }} entity)
+    {
+        {%- if Properties %}
+        {%- for prop in Properties %}
+        {%- if prop.name != "Id" and prop.name not in audit_props %}
+        entity.{{ prop.name }} = {{ prop.name }};
+        {%- endif %}
+        {%- endfor %}
+        {%- endif %}
+        return entity;
+    }
+{% if secured %}
+    public IReadOnlyList<string> RequiredRoles => [];
+    public IReadOnlyList<string> RequiredOperations => [];{% endif %}
+{% if cached %}
+    public IReadOnlyList<string> CacheKeyPatterns => ["{{ Name | lower }}*", $"{{ Name | lower }}_{Id}"];{% endif %}
+}

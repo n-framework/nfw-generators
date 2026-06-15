@@ -1,0 +1,41 @@
+using Mediator;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using UnionRailway;
+using UnionRailway.AspNetCore;
+using {{ Service }}.Core.Application.Features.{{ Feature }}.Commands.Update{{ Name }};
+
+namespace {{ Service }}.Presentation.WebApi.Features.{{ Feature }}.Endpoints.Update{{ Name }};
+
+internal static partial class Update{{ Name }}Endpoint
+{
+    private const string RoutePath = "/{id}";
+    private const string OperationName = "Update{{ Name }}";
+    private const string Tag = "{{ Feature | pascal_case }}";
+    private const string OpenApiSummary = "Update an existing {{ Name }}";
+
+    extension(IEndpointRouteBuilder endpoints)
+    {
+        internal void MapUpdate{{ Name }}Endpoint()
+        {
+            _ = endpoints
+                .MapPut(
+                    RoutePath,
+                    async ({{ IdType | default(value="Guid") }} id, Update{{ Name }}Request request, ISender sender) =>
+                    {
+                        Rail<Update{{ Name }}CommandResult> result = await sender.Send(request.ToCommand(id)).ConfigureAwait(false);
+                        return result.ToHttpResult();
+                    }
+                )
+                .WithName(OperationName)
+                .WithTags(Tag)
+                .Produces<Update{{ Name }}CommandResult>(StatusCodes.Status200OK)
+                .ProducesProblem(StatusCodes.Status404NotFound)
+                .AddOpenApiOperationTransformer((operation, context, ct) =>
+                {
+                    operation.Summary = OpenApiSummary;
+                    return Task.CompletedTask;
+                });
+        }
+    }
+}

@@ -1,0 +1,41 @@
+using Mediator;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using UnionRailway;
+using UnionRailway.AspNetCore;
+using {{ Service }}.Core.Application.Features.{{ Feature }}.Queries.Get{{ Name }}ById;
+
+namespace {{ Service }}.Presentation.WebApi.Features.{{ Feature }}.Endpoints.Get{{ Name }}ById;
+
+internal static partial class Get{{ Name }}ByIdEndpoint
+{
+    private const string RoutePath = "/{id}";
+    private const string OperationName = "Get{{ Name }}ById";
+    private const string Tag = "{{ Feature | pascal_case }}";
+    private const string OpenApiSummary = "Get {{ Name }} by Id";
+
+    extension(IEndpointRouteBuilder endpoints)
+    {
+        internal void MapGet{{ Name }}ByIdEndpoint()
+        {
+            _ = endpoints
+                .MapGet(
+                    RoutePath,
+                    async ({{ IdType | default(value="Guid") }} id, ISender sender) =>
+                    {
+                        Rail<Get{{ Name }}ByIdQueryResult> result = await sender.Send(new Get{{ Name }}ByIdQuery(id)).ConfigureAwait(false);
+                        return result.ToHttpResult();
+                    }
+                )
+                .WithName(OperationName)
+                .WithTags(Tag)
+                .Produces<Get{{ Name }}ByIdQueryResult>(StatusCodes.Status200OK)
+                .ProducesProblem(StatusCodes.Status404NotFound)
+                .AddOpenApiOperationTransformer((operation, context, ct) =>
+                {
+                    operation.Summary = OpenApiSummary;
+                    return Task.CompletedTask;
+                });
+        }
+    }
+}

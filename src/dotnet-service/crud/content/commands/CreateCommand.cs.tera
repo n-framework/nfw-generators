@@ -1,0 +1,31 @@
+using NFramework.Mediator.Abstractions;
+{% if secured %}using NFramework.Mediator.Abstractions.Authorization;{% endif %}
+{% if cached %}using NFramework.Mediator.Abstractions.Caching;{% endif %}
+using {{ Service }}.Core.Domain.Features.{{ Feature }}.Entities;
+
+namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Commands.Create{{ Name }};
+
+public record Create{{ Name }}Command : IRailRequest<Create{{ Name }}CommandResult>
+    {%- if secured %}, ISecuredRequest{%- endif %}
+    {%- if cached %}, ICacheRemoverRequest{%- endif %}
+{
+{%- set audit_props = ["CreatedAt", "UpdatedAt", "IsDeleted", "DeletedAt"] -%}
+{%- for prop in Properties %}
+{%- if prop.name != "Id" and prop.name not in audit_props %}
+    public required {{ prop.type }}{% if prop.nullable %}?{% endif %} {{ prop.name }} { get; init; }
+{%- endif %}
+{%- endfor %}
+
+    internal {{ Name }} ToEntity() => new(
+        {%- if IdType == "Guid" %}Guid.NewGuid(){% else %}default{% endif %}
+        {%- for prop in Properties %}
+        {%- if prop.name != "Id" and prop.name not in audit_props %},{{ prop.name }}
+        {%- endif %}
+        {%- endfor %}
+    );
+{% if secured %}
+    public IReadOnlyList<string> RequiredRoles => [];
+    public IReadOnlyList<string> RequiredOperations => [];{% endif %}
+{% if cached %}
+    public IReadOnlyList<string> CacheKeyPatterns => ["{{ Name | lower }}*"];{% endif %}
+}
