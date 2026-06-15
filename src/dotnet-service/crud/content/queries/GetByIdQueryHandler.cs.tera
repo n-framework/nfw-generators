@@ -12,11 +12,11 @@ public class Get{{ Name }}ByIdQueryHandler(I{{ Name }}Repository repository) : I
     public async ValueTask<Rail<Get{{ Name }}ByIdQueryResult>> Handle(Get{{ Name }}ByIdQuery request, CancellationToken cancellationToken)
     {
         Rail<{{ Name }}> getResult = await repository.GetByIdAsync(request.Id, cancellationToken);
-        if (!getResult.IsSuccess(out {{ Name }} entity, out UnionError? error))
+        if (!getResult.IsSuccess(out {{ Name }}? entity, out UnionError? error))
             return error.GetValueOrDefault().ToFail<Get{{ Name }}ByIdQueryResult>();
 
         return new Get{{ Name }}ByIdQueryResult(new {{ Name }}Dto(
-            entity.Id{%- for prop in Properties %}
+            entity!.Id{%- for prop in Properties %}
             {%- if prop.name != "Id" and prop.name not in audit_props %},
             entity.{{ prop.name }}
             {%- endif %}

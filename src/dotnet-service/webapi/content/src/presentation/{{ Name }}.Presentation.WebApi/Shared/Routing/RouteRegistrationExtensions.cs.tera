@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using UnionRailway.AspNetCore;
 
-namespace {{ Namespace }}.Presentation.WebApi.Shared.Routing;
+namespace {{ Service }}.Presentation.WebApi.Shared.Routing;
 
 internal static partial class RouteRegistrationExtensions
 {

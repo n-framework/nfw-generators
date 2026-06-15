@@ -10,10 +10,10 @@ public class Delete{{ Name }}CommandHandler(I{{ Name }}Repository repository) : 
     public async ValueTask<Rail<Delete{{ Name }}CommandResult>> Handle(Delete{{ Name }}Command request, CancellationToken cancellationToken)
     {
         Rail<{{ Name }}> getResult = await repository.GetByIdAsync(request.Id, cancellationToken);
-        if (!getResult.IsSuccess(out {{ Name }} entity, out UnionError? getError))
+        if (!getResult.IsSuccess(out {{ Name }}? entity, out UnionError? getError))
             return getError.GetValueOrDefault().ToFail<Delete{{ Name }}CommandResult>();
 
-        Rail<{{ Name }}> deleteResult = await repository.DeleteAsync(entity, cancellationToken);
+        Rail<{{ Name }}> deleteResult = await repository.DeleteAsync(entity!, cancellationToken);
         if (!deleteResult.IsSuccess(out _, out UnionError? deleteError))
             return deleteError.GetValueOrDefault().ToFail<Delete{{ Name }}CommandResult>();
 
@@ -22,7 +22,7 @@ public class Delete{{ Name }}CommandHandler(I{{ Name }}Repository repository) : 
             return saveError.GetValueOrDefault().ToFail<Delete{{ Name }}CommandResult>();
 
         return new Delete{{ Name }}CommandResult(
-            entity.Id
+            entity!.Id
             {%- if EntityType == "soft_deletable_entity" %},
             entity.IsDeleted,
             entity.DeletedAt

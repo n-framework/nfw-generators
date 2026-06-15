@@ -16,11 +16,11 @@ public class List{{ Name }}sQueryHandler(I{{ Name }}Repository repository) : IRe
         PageableQueryOption<{{ Name }}> options = new() { Page = request.Paging };
 
         Rail<PaginatedList<{{ Name }}>> listResult = await repository.GetListAsync(options, cancellationToken);
-        if (!listResult.IsSuccess(out PaginatedList<{{ Name }}> paginatedEntities, out UnionError? error))
+        if (!listResult.IsSuccess(out PaginatedList<{{ Name }}>? paginatedEntities, out UnionError? error))
             return error.GetValueOrDefault().ToFail<List{{ Name }}sQueryResult>();
 
         PaginatedList<{{ Name }}Dto> paginatedDtos = new(
-            paginatedEntities.Items.Select(entity => new {{ Name }}Dto(
+            paginatedEntities!.Items.Select(entity => new {{ Name }}Dto(
                 entity.Id{%- for prop in Properties %}
                 {%- if prop.name != "Id" and prop.name not in audit_props %},
                 entity.{{ prop.name }}
@@ -35,7 +35,7 @@ public class List{{ Name }}sQueryHandler(I{{ Name }}Repository repository) : IRe
                 entity.DeletedAt
                 {%- endif %}
             )).ToList(),
-            paginatedEntities.Meta
+            paginatedEntities!.Meta
         );
 
         return new List{{ Name }}sQueryResult(paginatedDtos);
