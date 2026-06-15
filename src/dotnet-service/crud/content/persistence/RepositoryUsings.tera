@@ -1,0 +1,2 @@
+using {{ Service }}.Core.Application.Contracts.Persistence;
+using {{ Service }}.Infrastructure.Persistence.Features.{{ Feature }}.Repositories;

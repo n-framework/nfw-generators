@@ -76,9 +76,28 @@ steps:
   # ==========================================
   # 3. PERSISTENCE
   # ==========================================
+  # Repository interface
   - action: render
     source: content/persistence/Repository.cs.tera
     destination: src/core/{{ Service }}.Core.Application/Contracts/Persistence/I{{ Name }}Repository.cs
+  # Repository implementation
+  - action: render
+    source: content/persistence/RepositoryImpl.cs.tera
+    destination: src/infrastructure/{{ Service }}.Infrastructure.Persistence/Features/{{ Feature }}/Repositories/{{ Name }}Repository.cs
+  # DI registration
+  - action: inject
+    source: content/persistence/RepositoryRegistration.tera
+    destination: src/infrastructure/{{ Service }}.Infrastructure.Persistence/InfrastructurePersistenceRegistrationExtensions.Nfw.g.cs
+    injection_target:
+      type: region
+      value: repository-registrations
+  # DI usings
+  - action: inject
+    source: content/persistence/RepositoryUsings.tera
+    destination: src/infrastructure/{{ Service }}.Infrastructure.Persistence/InfrastructurePersistenceRegistrationExtensions.Nfw.g.cs
+    injection_target:
+      type: region
+      value: repository-usings
 
   # ==========================================
   # 4. SPECIFICATIONS (Business Rules)

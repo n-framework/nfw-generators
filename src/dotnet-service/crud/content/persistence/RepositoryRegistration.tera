@@ -1,0 +1,1 @@
+services.AddScoped<I{{ Name }}Repository, {{ Name }}Repository>();
