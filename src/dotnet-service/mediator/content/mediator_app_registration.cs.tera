@@ -1,0 +1,1 @@
+services.AddMediator(options => options.ServiceLifetime = ServiceLifetime.Scoped);

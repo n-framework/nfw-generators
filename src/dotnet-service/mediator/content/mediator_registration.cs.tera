@@ -1,5 +1,3 @@
-// Mediator
-builder.Services.AddMediator();
 // TODO: Active when NFramework packages are released
 //builder.Services.AddNFrameworkLogging();
 //builder.Services.AddNFrameworkPerformance();

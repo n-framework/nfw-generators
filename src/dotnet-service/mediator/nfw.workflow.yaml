@@ -10,14 +10,26 @@ steps:
     command: dotnet add src/core/{{ Service }}.Core.Application/{{ Service }}.Core.Application.csproj reference ../../../src/core-mediator-dotnet/src/NFramework.Mediator.Mediator/NFramework.Mediator.Mediator.csproj
   - action: run_command
     command: dotnet add src/core/{{ Service }}.Core.Application/{{ Service }}.Core.Application.csproj reference ../../../src/core-mediator-dotnet/src/NFramework.Mediator.Mediator.Validation.FluentValidation/NFramework.Mediator.Mediator.Validation.FluentValidation.csproj
-  # Add Mediator to registration
+  # Register AddMediator in Application layer (source generator must see the call site)
+  - action: inject
+    source: content/mediator_app_registration.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/ApplicationServiceRegistration.Nfw.g.cs
+    injection_target:
+      type: region
+      value: module-registrations
+  - action: inject
+    source: content/mediator_app_usings.cs.tera
+    destination: src/core/{{ Service }}.Core.Application/ApplicationServiceRegistration.Nfw.g.cs
+    injection_target:
+      type: region
+      value: module-usings
+  # Register NFramework pipeline behaviors in Program.Nfw.g.cs
   - action: inject
     source: content/mediator_registration.cs.tera
     destination: src/presentation/{{ Service }}.Presentation.{{ PresentationLayer }}/Program.Nfw.g.cs
     injection_target:
       type: region
       value: module-registrations
-  # Inject mediator using into Program.Nfw.g.cs
   - action: inject
     source: content/mediator_usings.cs.tera
     destination: src/presentation/{{ Service }}.Presentation.{{ PresentationLayer }}/Program.Nfw.g.cs

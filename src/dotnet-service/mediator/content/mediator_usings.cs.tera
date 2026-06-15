@@ -1,4 +1,3 @@
-using Mediator;
 // TODO: Active when NFramework packages are released
 //using NFramework.Mediator.Mediator.Authorization;
 //using NFramework.Mediator.Mediator.Caching;
