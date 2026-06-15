@@ -1,7 +1,7 @@
 using NFramework.Mediator.Abstractions;
 {% if secured %}using NFramework.Mediator.Abstractions.Authorization;{% endif %}
 {% if cached %}using NFramework.Mediator.Abstractions.Caching;{% endif %}
-using {{ Service }}.Core.Domain.Entities;
+using {{ Service }}.Core.Domain.Features.{{ Feature }}.Entities;
 
 namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Commands.Create{{ Name }};
 
@@ -17,11 +17,9 @@ public record Create{{ Name }}Command : IRailRequest<Create{{ Name }}CommandResu
 {%- endfor %}
 
     internal {{ Name }} ToEntity() => new(
-        {%- set_global is_first_entity_arg = true -%}
+        {%- if IdType == "Guid" %}Guid.NewGuid(){% else %}default{% endif %}
         {%- for prop in Properties %}
-        {%- if prop.name != "Id" and prop.name not in audit_props %}
-        {%- if not is_first_entity_arg %},{% endif %}{{ prop.name }}
-        {%- set_global is_first_entity_arg = false -%}
+        {%- if prop.name != "Id" and prop.name not in audit_props %},{{ prop.name }}
         {%- endif %}
         {%- endfor %}
     );

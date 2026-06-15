@@ -3,7 +3,7 @@ using NFramework.Persistence.Abstractions.Pagination;
 using NFramework.Persistence.Abstractions.Repositories;
 using UnionRailway;
 using {{ Service }}.Core.Application.Contracts.Persistence;
-using {{ Service }}.Core.Domain.Entities;
+using {{ Service }}.Core.Domain.Features.{{ Feature }}.Entities;
 
 namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Queries.List{{ Name }}s;
 

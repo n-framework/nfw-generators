@@ -1,7 +1,7 @@
 using NFramework.Mediator.Abstractions;
 {% if secured %}using NFramework.Mediator.Abstractions.Authorization;{% endif %}
 {% if cached %}using NFramework.Mediator.Abstractions.Caching;{% endif %}
-using {{ Service }}.Core.Domain.Entities;
+using {{ Service }}.Core.Domain.Features.{{ Feature }}.Entities;
 
 namespace {{ Service }}.Core.Application.Features.{{ Feature }}.Commands.Update{{ Name }};
 
