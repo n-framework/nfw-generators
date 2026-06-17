@@ -3,21 +3,16 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Buy A Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black&style=flat)](https://ahmetcetinkaya.me/donate)
 
-Starter templates for the `nfw` CLI toolchain. Templates use Scriban for rendering and are consumed by the [nfw CLI](../nfw).
-
-Templates live under the repository `src/` directory (for example `src/blank-workspace/`).
-
-**Core Techs:**
-[![Scriban](https://img.shields.io/badge/Scriban-0050A0?style=flat)](https://github.com/scriban/scriban)
+NFramework Generators for the `nfw` CLI toolchain. Templates use Tera for rendering and are consumed by the [nfw CLI](../nfw).
 
 ---
 
 ## Templates
 
-| Identifier | Display Name    | Description                      |
-| ---------- | --------------- | -------------------------------- |
-| `blank-workspace` | Blank Workspace | Minimal starter workspace |
-| `dotnet-service` | .NET Service (Clean Architecture) | .NET service with Domain/Application/Infrastructure/Api layers |
+| Identifier        | Display Name                      | Description                                                    |
+| ----------------- | --------------------------------- | -------------------------------------------------------------- |
+| `blank-workspace` | Blank Workspace                   | Minimal starter workspace                                      |
+| `dotnet-service`  | .NET Service (Clean Architecture) | .NET service with Domain/Application/Infrastructure/Api layers |
 
 ---
 
