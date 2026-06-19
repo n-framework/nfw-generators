@@ -1,13 +1,13 @@
-# nfw-templates
+# nfw-generators
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Buy A Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black&style=flat)](https://ahmetcetinkaya.me/donate)
 
-NFramework Generators for the `nfw` CLI toolchain. Templates use Tera for rendering and are consumed by the [nfw CLI](../nfw).
+NFramework generators for the `nfw` CLI toolchain. Generators render with [Tera](https://crates.io/crates/tera) and are consumed by the [nfw CLI](../nfw). The catalog is declared in [`nfw.catalog.yaml`](nfw.catalog.yaml).
 
 ---
 
-## Templates
+## Generators
 
 | Identifier        | Display Name                      | Description                                                    |
 | ----------------- | --------------------------------- | -------------------------------------------------------------- |
@@ -18,14 +18,33 @@ NFramework Generators for the `nfw` CLI toolchain. Templates use Tera for render
 
 ## Usage
 
-Templates are resolved by the `nfw` CLI. See the [nfw CLI README](../nfw) for details.
+Generators are resolved by the `nfw` CLI. See the [nfw CLI README](../nfw) for details.
 
 ```bash
-# List templates
-nfw templates
+# List discovered generators
+nfw generators list
 
-# Create a workspace from a template
-nfw new my-workspace --template blank-workspace
+# Create a workspace from a generator
+nfw new my-workspace --generator blank-workspace
+
+# Scaffold a .NET service
+nfw add service Orders --generator dotnet-service
+```
+
+---
+
+## Build & Test
+
+```bash
+make build
+make test
+```
+
+## Format & Lint
+
+```bash
+make format
+make lint
 ```
 
 ---
